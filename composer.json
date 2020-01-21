@@ -1,0 +1,13 @@
+{
+    "require": {
+        "slim/slim": "^3.0",
+        "slim/http-cache": "^0.4.0",
+        "slim/csrf": "^0.8.2",
+        "palanik/corsslim": "*",
+        "tuupola/slim-jwt-auth": "^2.4",
+        "firebase/php-jwt": "^5.0",
+        "tuupola/base62": "^0.11.0",
+        "tuupola/slim-basic-auth": "^2.3",
+        "tuupola/cors-middleware": "^0.5.2"
+    }
+}

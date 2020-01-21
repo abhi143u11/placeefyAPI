@@ -1,0 +1,447 @@
+
+socialmediaregistration Result at 2020-01-16 21:47:30 :-
+Array
+(
+    [client_name] => 
+    [email_address] => 
+    [social_unique_id] => 
+    [social_type] => 
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:49:25 :-
+Array
+(
+    [client_name] => Swapnil
+    [email_address] => Rathi
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:49:29 :-
+Array
+(
+    [client_name] => Swapnil
+    [email_address] => Rathi
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:50:20 :-
+Array
+(
+    [client_name] => Swapnil
+    [email_address] => Rathi
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:51:24 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:52:02 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:52:04 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:52:33 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:53:25 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:53:27 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:54:29 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:55:03 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 21:58:02 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 22:00:05 :-
+Array
+(
+    [client_name] => Swapnil Rathi
+    [email_address] => rathi@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-16 22:00:38 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => Dev@gmail.com
+    [social_unique_id] => sfdsfdgffhfh676688878dfdf
+    [social_type] => facebook
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:40:55 :-
+Array
+(
+    [client_name] => 
+    [email_address] => 
+    [social_unique_id] => 
+    [social_type] => 
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:42:17 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:52:41 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:57:18 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:58:40 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:59:05 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:59:21 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:59:24 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 09:59:26 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:00:13 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:00:15 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:04:04 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:04:08 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:04:34 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:05:35 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:05:40 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:08:23 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:13:47 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:16:31 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => same@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:16:39 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => samessss@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:17:48 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => samessss@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-17 10:18:00 :-
+Array
+(
+    [client_name] => Sagar Dev 
+    [email_address] => samesssssssss@address.com
+    [social_unique_id] => jbhsddjdsdc65dsc6ds
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+)
+
+socialmediaregistration Result at 2020-01-19 16:47:10 :-
+Array
+(
+    [client_name] => 100285219651164373936
+    [email_address] => vishveshu143@gmail.com
+    [social_unique_id] => Vishvesh
+    [social_type] => ujawane
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-01-19 20:51:24 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-01-19 20:51:28 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-01-21 09:44:13 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => Slim\Http\UploadedFile Object
+        (
+            [file] => 
+            [name:protected] => 
+            [type:protected] => 
+            [size:protected] => 0
+            [error:protected] => 4
+            [sapi:protected] => 1
+            [stream:protected] => 
+            [moved:protected] => 
+        )
+
+)
+
+socialmediaregistration Result at 2020-01-21 09:45:01 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => Slim\Http\UploadedFile Object
+        (
+            [file] => 
+            [name:protected] => 
+            [type:protected] => 
+            [size:protected] => 0
+            [error:protected] => 4
+            [sapi:protected] => 1
+            [stream:protected] => 
+            [moved:protected] => 
+        )
+
+)

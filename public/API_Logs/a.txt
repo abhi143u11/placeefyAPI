@@ -1,0 +1,8 @@
+
+clientlogin Result at 2020-01-06 16:05:32 :-
+Array
+(
+    [uname] => qqq
+    [password] => 12
+    [condition] => 
+)

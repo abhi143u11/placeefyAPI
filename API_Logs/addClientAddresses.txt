@@ -1,0 +1,16 @@
+
+addClientAddresses Result at 2020-01-07 12:40:45 :-
+Array
+(
+    [client_id] => faf310fb-d653-757b-48dc-21b7572846c9
+    [mobile_no] => 
+    [pincode] => 444607
+    [house_no] => 42
+    [street] => Trisharan Nagar
+    [landmark] => Buddha vihar
+    [city] => Nagpur
+    [state] => Maharashtra
+    [address_type] => Home
+    [latitude] => 21.5555
+    [longitude] => 79.5555
+)

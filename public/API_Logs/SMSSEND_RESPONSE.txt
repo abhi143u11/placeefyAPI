@@ -1,0 +1,15 @@
+
+SMSSEND_RESPONSE Result at 2020-01-13 20:36:26 :-
+Array
+(
+    [0] => stdClass Object
+        (
+            [responseCode] => Message SuccessFully Submitted
+        )
+
+    [1] => stdClass Object
+        (
+            [msgid] => 26591753
+        )
+
+)

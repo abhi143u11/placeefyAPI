@@ -1,0 +1,217 @@
+
+clientregistration Result at 2020-01-06 21:26:57 :-
+Array
+(
+    [customer_name] => 
+    [mobile] => 
+    [password] => 
+)
+
+clientregistration Result at 2020-01-06 21:27:31 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:28:26 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:28:59 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:29:02 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:29:41 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:30:31 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:30:34 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:30:41 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:32:19 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:32:21 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:32:33 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 21:32:54 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-06 22:39:19 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+    [password] => 1234
+)
+
+clientregistration Result at 2020-01-17 14:22:30 :-
+Array
+(
+    [customer_name] => Pratik Tambekar
+    [mobile] => 9579337525
+)
+
+clientregistration Result at 2020-01-17 14:22:55 :-
+Array
+(
+    [customer_name] => Eccentric Infosystem
+    [mobile] => 9579658009
+)
+
+clientregistration Result at 2020-01-17 14:23:34 :-
+Array
+(
+    [customer_name] => Eccentric Infosystem
+    [mobile] => 9579658009
+)
+
+clientregistration Result at 2020-01-17 14:24:30 :-
+Array
+(
+    [customer_name] => Eccentric Infosystem
+    [mobile] => 9579658009
+)
+
+clientregistration Result at 2020-01-19 16:50:34 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 17:01:24 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 17:17:11 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 17:17:17 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 17:17:57 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 17:26:10 :-
+Array
+(
+    [customer_name] => Vishvesh
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-19 20:52:22 :-
+Array
+(
+    [customer_name] => test123
+    [mobile] => 7020657988
+)
+
+clientregistration Result at 2020-01-19 20:53:49 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-20 08:33:17 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-20 19:22:13 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)
+
+clientregistration Result at 2020-01-20 20:00:52 :-
+Array
+(
+    [customer_name] => test
+    [mobile] => 8830828911
+)

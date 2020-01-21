@@ -1,0 +1,12 @@
+
+updateClientInfo Result at 2020-01-08 18:13:47 :-
+Array
+(
+    [client_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [mobile_no] => 9579337525
+    [email_id] => connect@eisys.in
+    [customer_type] => student
+    [gender] => male
+    [meal_preference] => veg
+    [dob] => 07-01-1991
+)

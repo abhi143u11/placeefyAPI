@@ -1,0 +1,120 @@
+
+clientlogin Result at 2020-01-06 20:46:05 :-
+Array
+(
+    [cust_phone] => qqq
+    [password] => 12
+    [condition] => 
+)
+
+clientlogin Result at 2020-01-06 20:47:06 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 12
+    [condition] => `phone_office`='9579337525' and `password`='c20ad4d76fe97759aa27a0c99bff6710' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 20:47:58 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 12
+    [condition] => `phone_office`='9579337525' and `password`='c20ad4d76fe97759aa27a0c99bff6710' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:08:00 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:08:07 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:09:13 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:09:15 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:09:53 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:10:58 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:11:13 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:11:58 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:36:37 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-06 22:40:30 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-07 12:54:36 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => 1234
+    [condition] => `phone_office`='9579337525' and `password_c`='81dc9bdb52d04dc20036dbd8313ed055' and A.deleted=0
+)
+
+clientlogin Result at 2020-01-08 15:13:26 :-
+Array
+(
+    [cust_phone] => 9579337525
+    [password] => ouoIXFpj
+    [condition] => `phone_office`='9579337525' and `password_c`='342f98cf0a0693b9450a0759b2217307' and A.deleted=0
+)

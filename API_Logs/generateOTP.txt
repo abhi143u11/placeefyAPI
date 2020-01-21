@@ -1,0 +1,10 @@
+
+generateOTP Result at 2020-01-17 14:12:49 :-
+Array
+(
+    [client_id] => dcd33f38-9559-504b-8cd8-48e6667917ef
+    [mobile_no] => 957937525
+)
+
+generateOTP Result at 2020-01-17 14:12:49 :-
+Invalid Mobile number:957937525
