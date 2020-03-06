@@ -26,6 +26,8 @@ define('ATHORIZATION_HEADER_NOT_FOUND',300);
 define('ACCESS_TOKEN_ERRORS',301);
 define('JWT_PROCESSING_ERROR',302);
 define('GATEWAY','android');
+define('SITE_URL','http://www.vrcompanies.in/placeefy/');
+define('UPLOAD_URL','http://www.vrcompanies.in/placeefy/uploads/');
 //set all API keys 
 $config = array();
 $config['api_log_file_path'] = basename(dirname(__DIR__)) . '/../../API_Logs/';

@@ -1066,5 +1066,177 @@ $app->map(['POST'],'/generateOTP', function( $request,$response,$args) {
 } 
 });
 
+$app->map(['POST'],'/homeScreen', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';
+                $latitude =  $request->getParam('latitude');
+                $longitude =  $request->getParam('longitude');
+                $client_id =  $request->getParam('client_id');
+                
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'homeScreen.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('client_id'=>$client_id,'longitude'=>$longitude,'latitude'=>$latitude);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\nhomeScreen Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);               
+                //****************ENd OF Code*****************
+                
+                
+                //validate parameters
+                $latitude = $rest->validateParameter('latitude', $latitude, INTEGER);
+                $longitude = $rest->validateParameter('longitude', $longitude, INTEGER);
+                 
+                $datetime = date("Y-m-d H:i:s");
+                $user_ip = getUserIP();
+                $homescreen = array();
+                $blank_arr =  array();
+                $childarr = array();
+                $resArr = array();
+                
+                // Root Code start here
+                $fetch_root_code = "SELECT `section_card_ui_code` FROM `ply_app_management` WHERE `section_type`='Root' and deleted=0 and status='active'";
+                if($db->db_num($fetch_root_code))
+                 {
+                    $app_mgmt_query =  $db->mysqli->query($fetch_root_code);
+                    $row11 = mysqli_fetch_assoc($app_mgmt_query);
+                    $root_code = $db->convert_jsonObject_into_arrray($row11['section_card_ui_code']);
+                    foreach ($root_code as $key => $value) {
+                        $homescreen['dashboard_view'][$key] = $value;
+                    }
+                    
+                 }
+
+                // Root code end here
+                 $children = '    
+                        {
+                          "type": "LinearLayout",
+                          "layout_width": "match_parent",
+                          "layout_height": "wrap_content",
+                          "orientation": "vertical"
+                        }
+                        ';
+                    
+                $childarr = json_decode($children,TRUE);
+                $fetch_seq_wise_code = "SELECT sequence_no,section_used_for_c,section_type FROM `ply_app_management` a join `ply_app_management_cstm` b on a.id=b.id_c WHERE a.deleted=0  and `sequence_no`!=0 and status='active' order by `sequence_no`";
+                if($db->db_num($fetch_seq_wise_code))
+                 {
+                        $ui_inc = 0;
+                        $mysql_query =  $db->mysqli->query($fetch_seq_wise_code);
+                        while($row = mysqli_fetch_assoc($mysql_query)) 
+                        {
+                            $section_used_type = $row['section_used_for_c'];
+                            $ui_code = $db->convert_jsonObject_into_arrray($db->get_sequence_wise_code($row['sequence_no']));
+                            
+                            foreach ($ui_code as $key => $value) 
+                            {
+                                $dynamic_ui_code[$ui_inc][$key] = $value;
+                            }
+                            $ui_inc++; 
+                        }
+                }
+                    
+               
+                    // First code for offer start
+                     $offer_qry = "SELECT `id`,`name`,`date_entered`,`description`,`offer_from`,`offer_to`,`offer_type`,`offer_amount_discount`,`offer_given_by`,`offer_status`,`offer_avail_count`,`offer_expenditure`,`offer_for`,`offer_applicable_over_amount`,`offer_display_type`,`offer_upto_c` FROM `ply_offer` as A inner join `ply_offer_cstm` as B on A.id=B.id_c WHERE A.deleted=0 and `offer_status`='active'";
+                            //end
+                        if($db->db_num($offer_qry))
+                        {
+                            $parent_type = 'ply_Offer';
+                            $mysql_query =  $db->mysqli->query($offer_qry); 
+                            while($row1 = mysqli_fetch_assoc($mysql_query)) { 
+                                $resArr[] = $row1; 
+                            }
+                             for($i=0;$i<count($resArr);$i++)
+                            {
+                                $offer_id = $resArr[$i]['id'];
+                                $get_offer_imgs = "SELECT B.ply_offer_notes_1notes_idb FROM `ply_offer` A join `ply_offer_notes_1_c` B on A.id = B.`ply_offer_notes_1ply_offer_ida` where A.deleted=0 and B.deleted=0 and A.`id`='$offer_id'";
+                                $mysql_query_off =  $db->mysqli->query($get_offer_imgs); 
+                                $row_off = mysqli_fetch_assoc($mysql_query_off);
+                                if($row_off['ply_offer_notes_1notes_idb']!='')
+                                    $resArr[$i]['image'] = UPLOAD_URL .$row_off['ply_offer_notes_1notes_idb'];
+                                else
+                                   $resArr[$i]['image'] = 'image not available'; 
+                            }
+                        
+                        }
+                    //end of offer code
+
+                    $a = array(
+                               "type"=>$homescreen['dashboard_view']['type'],
+                               "layout_width"=>$homescreen['dashboard_view']['layout_width'],
+                               "layout_height"=>$homescreen['dashboard_view']['layout_height'],
+                                'children'=> array(
+                                                   array(
+                                                                
+                                                         "type"=>$childarr['type'],
+                                                          "layout_width"=>$childarr['layout_width'],
+                                                          "layout_height"=>$childarr['layout_height'],
+                                                           "orientation"=>$childarr['orientation'],
+                                                            "children"=>$dynamic_ui_code
+                                                           )
+                                                    )
+                            );
+                                            
+                        $output = array(
+                        'dashboard_view' => $a,
+                        'dashboard_data' => array(
+                                    "offer"=>$resArr,
+                                    'sponsored_kitchens'=>$db->get_kitchen('Sponsered','yes',$latitude,$longitude),
+                                    'newest_kitchen'=>$db->get_kitchen('new','no',$latitude,$longitude),
+                                    'meal_of_the_day'=>$db->get_all_todays_special_menus($latitude,$longitude),
+                                    'top_rated_kitchens'=>$db->get_kitchen('top_rated','no',$latitude,$longitude),
+                                    'trending_chef'=>$db->get_all_vendors()
+                                            )
+                                        );
+
+ 
+            if(!empty($output))    
+                return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>$output]);
+            else
+                return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Sorry somthing goes wrong']);
+
+  } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+
+$app->map(['POST'],'/getSpecificKitchenDetails', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';
+                $kitchen_id =  $request->getParam('kitchen_id');
+
+                //validate parameters
+                $kitchen_id = $rest->validateParameter('kitchen_id', $kitchen_id, STRING);
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'getKitchenDetails.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('kitchen_id'=>$kitchen_id);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\ngetKitchenDetails Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);               
+                //****************ENd OF Code*****************
+
+                $fetch_kitchen = "SELECT `id` FROM `ply_kitchen` WHERE `id`='$kitchen_id' and deleted=0";
+                if($db->db_num($fetch_kitchen))
+                 {
+
+                        return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>$db->get_specific_kitchen_details($kitchen_id)]);
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Kitchen not available for this kitchen id']);
+                 }
+
+
+
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+
 
 });

@@ -6,7 +6,7 @@ use \Firebase\JWT\JWT;
 error_reporting(1);
 ini_set('display_errors', 1);
 require '../vendor/autoload.php';
-session_start();
+//session_start();
 
 // Instantiate the app
 // $settings = require __DIR__ . '/../src/settings.php';
@@ -53,9 +53,10 @@ $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 //  require '../includes/functions.php';
 //  require '../includes/rest.php';
 require_once('../app/api/customer.php');
-require_once('../app/api/merchant.php');
-require_once('../app/api/delivery_boy.php');
-require_once('../app/api/orders.php');
+// require_once('../app/api/merchant.php');
+// require_once('../app/api/delivery_boy.php');
+// require_once('../app/api/orders.php');
+require_once('../app/api/test.php');
 
 
 
