@@ -1,0 +1,168 @@
+
+getKitchenDetails Result at 2020-03-02 18:30:14 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:30:19 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:33:46 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:34:34 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:36:34 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:36:36 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:36:37 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:36:42 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:37:21 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:38:25 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:39:20 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:39:22 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:39:24 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:39:26 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:39:30 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:40:08 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:40:47 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-02 18:56:06 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-03 12:00:33 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-03 12:08:55 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-03 12:09:59 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-03 15:54:01 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-03 15:56:51 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-04 09:39:32 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-04 09:39:38 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-04 09:42:39 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-04 09:50:24 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)
+
+getKitchenDetails Result at 2020-03-04 09:51:06 :-
+Array
+(
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+)

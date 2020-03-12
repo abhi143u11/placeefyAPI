@@ -1237,6 +1237,133 @@ $app->map(['POST'],'/getSpecificKitchenDetails', function( $request,$response,$a
   $app->response()->status(404);
 } 
 });
+$app->map(['POST'],'/makeKitchenFavourite', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';
+                $kitchen_id =  trim($request->getParam('kitchen_id'));
+                $client_id =  trim($request->getParam('client_id'));
+                //validate parameters
+                $kitchen_id = $rest->validateParameter('kitchen_id', $kitchen_id, STRING);
+                $client_id = $rest->validateParameter('client_id', $client_id, STRING);
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'makeKitchenFavourite.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('client_id'=>$client_id,'kitchen_id'=>$kitchen_id);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\nmakeKitchenFavourite Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);               
+                //****************ENd OF Code*****************
 
+                $fetch_kitchen = "SELECT `id` FROM `ply_kitchen` WHERE `id`='$kitchen_id' and deleted=0";
+                $fetch_client = "SELECT `id` FROM `accounts` WHERE `id`='$client_id' and deleted=0";
+                if($db->db_num($fetch_kitchen)>=1 && $db->db_num($fetch_client)>=1)
+                 {
+                    $check_already_avail = "SELECT * FROM `ply_customer_favorite_kitchen` WHERE `ply_kitchen_id_c`='$kitchen_id' and deleted=0";
+                    if($db->db_num($check_already_avail)==0)
+                    {
+                        $row_id_for_cust_kitc_rel = getGuid();
+                        $uuid = getGuid();
+                        $insert_into_fav_main_tbl = "INSERT INTO `ply_customer_favorite_kitchen`(`id`, `date_entered`, `date_modified`, `modified_user_id`, `created_by`, 
+                        `assigned_user_id`, `ply_kitchen_id_c`) VALUES ('$uuid','$timestamp','$timestamp','1','1','1','$kitchen_id')";
+                        $insert_csut_fav_kitchen = "INSERT INTO `accounts_ply_customer_favorite_kitchen_1_c`(`id`, `date_modified`, `accounts_ply_customer_favorite_kitchen_1accounts_ida`, `accounts_p3f03kitchen_idb`) VALUES ('$row_id_for_cust_kitc_rel','$timestamp','$client_id','$uuid')";
+                        if($db->execute($insert_csut_fav_kitchen) && $db->execute($insert_into_fav_main_tbl))
+                        {
+                            return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>'You have successfully added kitchen in your favourite list']);
+                        }
+                    }else{
+                        return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'mentioned kitchen is already added in your favourite list.']);
+                    }
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Kitchen or client id is not available in the database']);
+                 }
+
+
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+
+$app->map(['POST'],'/addKitchenRating', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';
+
+                $kitchen_id =  trim($request->getParam('kitchen_id'));
+                $client_id =  trim($request->getParam('client_id'));
+                $rating =  trim($request->getParam('rating'));
+                if($rating<=0 || $rating>=5)
+                {
+                    return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Rating value should be in between 0 to 5 range']);
+                    exit;
+                }
+                $review =  trim($request->getParam('review'));
+
+                //sentiment analyzer code start here
+                    $strings = array($review);
+                    require_once '../includes/phpInsight-master/autoload.php';
+                    $sentiment = new \PHPInsight\Sentiment();
+                    foreach ($strings as $string) {
+                        // calculations:
+                        $scores = $sentiment->score($string);
+                        $class = $sentiment->categorise($string);
+                        // output:   
+                    }
+                    if($class=='neu')
+                    {
+                        $Dominant = 'Neutral';
+                    }else if($class=='pos')
+                    {
+                        $Dominant = 'Positive';
+                    }else if($class=='neg'){
+                        $Dominant = 'Negative';
+                    }
+                //end of code here
+
+                //validate parameters
+                $kitchen_id = $rest->validateParameter('kitchen_id', $kitchen_id, STRING);
+                $client_id = $rest->validateParameter('client_id', $client_id, STRING);
+                $rating = $rest->validateParameter('rating', $rating, STRING);
+                $review = $rest->validateParameter('review', $review, STRING);
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'addKitchenRating.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('client_id'=>$client_id,'kitchen_id'=>$kitchen_id,'rating'=>$rating,'review'=>$review);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\naddKitchenRating Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);               
+                //****************ENd OF Code*****************
+                 
+                $fetch_kitchen = "SELECT `id` FROM `ply_kitchen` WHERE `id`='$kitchen_id' and deleted=0";
+                $fetch_client = "SELECT `id` FROM `accounts` WHERE `id`='$client_id' and deleted=0";
+                if($db->db_num($fetch_kitchen)>=1 && $db->db_num($fetch_client)>=1)
+                 {
+                    $check_already_avail = "SELECT * FROM `ply_rating_given_by_cust_2_kitchen` WHERE `account_id_c`='$client_id' and `ply_kitchen_id_c`='$kitchen_id' and `deleted`=0";
+                    if($db->db_num($check_already_avail)==0)
+                    {
+                        $row_id_for_cust_rating_rel = getGuid();
+                        $uuid = getGuid();
+                        $insert_into_cust_rating_Maintbl = "INSERT INTO `ply_rating_given_by_cust_2_kitchen`(`id`, `date_entered`, `date_modified`, `created_by`,`assigned_user_id`, `account_id_c`, `ply_kitchen_id_c`, `rating`) VALUES ('$uuid','$timestamp','$timestamp','1','1','$client_id','$kitchen_id','$rating')";
+                        $insert_into_cust_rating_customTbl = "INSERT INTO `ply_rating_given_by_cust_2_kitchen_cstm`(`id_c`, `review_c`, `sentiment_analysis_of_review_c`) VALUES ('$uuid','$review','$Dominant')";
+                        $insert_cust_rating_rel_tbl = "INSERT INTO `ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c`(`id`, `date_modified`, `ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida`, `ply_kitchecc16kitchen_idb`) VALUES ('$row_id_for_cust_rating_rel','$timestamp','$kitchen_id','$uuid')";
+                        if($db->execute($insert_into_cust_rating_Maintbl) && $db->execute($insert_into_cust_rating_customTbl) && $db->execute($insert_cust_rating_rel_tbl))
+                        {
+                            return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>'You have successfully given rating to this kitchen']);
+                        }
+                    }else{
+                        return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'user had already given rating to this kitchen']);
+                    }
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Kitchen or client id is not available in the database']);
+                 }
+
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
 
 });

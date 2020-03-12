@@ -152,7 +152,7 @@ class DB
 	    }
 	    public function get_kitchen_supervisor_name($id)
 	    {
-	    	$get_supervisor_name = "SELECT Concat(Ifnull(`salutation`,' '),' ',Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name FROM `ply_kitchen_supervisor` WHERE `id`='$id' and `deleted`=0"; 
+	    	$get_supervisor_name = "SELECT Concat(Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name FROM `ply_kitchen_supervisor` WHERE `id`='$id' and `deleted`=0"; 
 		    $mysql_query =  $this->mysqli->query($get_supervisor_name);			
 		    $row11 = $mysql_query->fetch_assoc();				
 		    $supervisor_nm = (isset($row11['name'])?$row11['name']:'NA');
@@ -194,7 +194,28 @@ class DB
 	                       $resArr1['name'] 	= $row13['name'];
 	                       $resArr1['date_entered'] = $row13['date_entered'];
 	                       $resArr1['description'] = $row13['description'];
-	                       $resArr1['kitchen_type'] = $row13['kitchen_type'];
+	                       switch($row13['kitchen_type'])
+	                       {
+	                       	 case 'veg' : 
+	                       	 				$resArr1['veg'] = true;
+	                       	 				$resArr1['nonveg'] = false;
+	                       	 				break;
+	                       	 case 'nonveg' :
+	                       	 				$resArr1['veg'] = false;
+	                       	 				$resArr1['nonveg'] = true;
+	                       	 				break;
+	                       	 case 'egg' : 
+	                       	 				$resArr1['veg'] = false;
+	                       					$resArr1['nonveg'] = true;
+	                       	 				break;
+	                       	 case 'veg_nonveg':
+	                       	 					$resArr1['veg'] = true;
+	                       	 					$resArr1['nonveg'] = true;
+	                       	 default:
+	                       	  		  $resArr1['veg'] = false;
+	                       	  		  $resArr1['nonveg'] = false;
+	                    	}
+
 	                       $resArr1['kitchen_id'] = $row13['kitchen_id'];
 	                       $resArr1['plot_no'] = $row13['plot_no'];
 	                       $resArr1['street_name'] = $row13['street_name'];
@@ -215,7 +236,7 @@ class DB
 	                       $resArr1['kitchen_unavail_on_sunday'] = $row13['kitchen_unavail_on_sunday'];
 	                       $resArr1['regular_meal_price_range'] = $row13['regular_meal_price_range'];
 	                       $resArr1['kitchen_business_type'] = $row13['kitchen_business_type_c'];
-	                       $resArr1['kitchen_serving_time'] = $row13['kitchen_serving_time'];
+	                       $resArr1['kitchen_serving_time'] = ucfirst(str_replace("_"," ",$row13['kitchen_serving_time_c']));
 
 	                       if($is_sponserd=='yes')
 	                       {
@@ -232,7 +253,7 @@ class DB
 
 	                    $kitchen_id = $row13['id'];
 	                	$vendor_arr = $this->get_vendor_name_from_kitchen($kitchen_id);
-	                	$resArr1['vendor_name'] = $vendor_arr['name'];
+	                	$resArr1['vendor_name'] = trim($vendor_arr['name']);
 	                	$resArr1['vendor_id'] = $vendor_arr['vendor_id'];
 	                	$resArr1['vendor_row_id'] = $vendor_arr['vendor_row_id'];
 	                	//get all vendor images
@@ -572,32 +593,51 @@ class DB
 	    {
 	    	$vendor_arr =  array();$vendor_arr1 =  array();
 	    	$parent_type = 'ply_Vendors';
-	    	$get_vendor_details= "SELECT A.`id`,Concat(Ifnull(`salutation`,' '),' ',Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name,`vendor_id`,`date_entered`,`description`,`website`,`team_size`,`city_name_c`,`phone_mobile`,`phone_work`,`primary_address_street`,`primary_address_city`,`primary_address_state`,`primary_address_postalcode`,`primary_address_country`,`about_vendor` FROM `ply_vendors` A join `ply_vendors_cstm` B on A.id=B.id_c where A.deleted=0";
+	    	$get_vendor_details= "SELECT A.`id`,Concat(Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name,`vendor_id`,`date_entered`,`description`,`website`,`team_size`,`city_name_c`,`phone_mobile`,`phone_work`,`primary_address_street`,`primary_address_city`,`primary_address_state`,`primary_address_postalcode`,`primary_address_country`,`about_vendor` FROM `ply_vendors` A join `ply_vendors_cstm` B on A.id=B.id_c join `ply_vendors_ply_kitchen_1_c` C on A.id=C.ply_vendors_ply_kitchen_1ply_vendors_ida where A.deleted=0 and C.deleted=0 group by id";
 		    $mysql_query =  $this->mysqli->query($get_vendor_details);			
 		    while($row11 = $mysql_query->fetch_assoc())
 		    {
-		    	$vendor_arr['row_id'] = $row11['id'];
-				$vendor_arr['name'] = $row11['name'];
-				$vendor_arr['vendor_id'] = $row11['vendor_id'];
-				$vendor_arr['date_entered'] = $row11['date_entered'];
-				$vendor_arr['description'] = $row11['description'];
-				$vendor_arr['website'] = $row11['website'];
-				$vendor_arr['team_size'] = $row11['team_size'];
-				$vendor_arr['city_name'] = $row11['city_name_c'];
-				$vendor_arr['phone_mobile'] = $row11['phone_mobile'];
-				$vendor_arr['phone_work'] = $row11['phone_work'];
-				$vendor_arr['primary_address_street'] = $row11['primary_address_street'];
-				$vendor_arr['primary_address_city'] = $row11['primary_address_city'];
-				$vendor_arr['primary_address_state'] = $row11['primary_address_state'];
-				$vendor_arr['primary_address_postalcode'] = $row11['primary_address_postalcode'];
-				$vendor_arr['primary_address_country'] = $row11['primary_address_country'];
-				$vendor_arr['about_vendor'] = $row11['about_vendor'];
-				$vendor_arr['image'] = $this->get_image_from_notes_module($row11['id'],$parent_type);
+		    	$check_vendor_kitchens = "SELECT A.`id`,C.`name` FROM `ply_vendors` A join `ply_vendors_ply_kitchen_1_c` B on A.`id` = B.`ply_vendors_ply_kitchen_1ply_vendors_ida` join ply_kitchen C on B.`ply_vendors_ply_kitchen_1ply_kitchen_idb` = C.`id` WHERE `ply_vendors_ply_kitchen_1ply_vendors_ida`='".$row11['id']."' and A.deleted=0 and B.deleted=0";
+		    	$count = $this->db_num($check_vendor_kitchens);
+		    	if($count==1)
+		    	{
+		    		$mysql_query_1 =  $this->mysqli->query($check_vendor_kitchens);
+		    		$row12 = $mysql_query_1->fetch_assoc();
+			    	$vendor_arr['row_id'] = $row11['id'];
+					$vendor_arr['name'] = $row11['name'];
+					$vendor_arr['kitchen_name'] = $row12['name'];
+					$vendor_arr['vendor_id'] = $row11['vendor_id'];
+					$vendor_arr['date_entered'] = $row11['date_entered'];
+					$vendor_arr['description'] = $row11['description'];
+					$vendor_arr['website'] = $row11['website'];
+					$vendor_arr['team_size'] = $row11['team_size'];
+					$vendor_arr['city_name'] = $row11['city_name_c'];
+					$vendor_arr['phone_mobile'] = $row11['phone_mobile'];
+					$vendor_arr['phone_work'] = $row11['phone_work'];
+					$vendor_arr['primary_address_street'] = $row11['primary_address_street'];
+					$vendor_arr['primary_address_city'] = $row11['primary_address_city'];
+					$vendor_arr['primary_address_state'] = $row11['primary_address_state'];
+					$vendor_arr['primary_address_postalcode'] = $row11['primary_address_postalcode'];
+					$vendor_arr['primary_address_country'] = $row11['primary_address_country'];
+					$vendor_arr['about_vendor'] = $row11['about_vendor'];
+					//$vendor_arr['image'] = $this->get_image_from_notes_module($row11['id'],$parent_type);
 
-				if(!empty($vendor_arr))
-                {
-                	array_push($vendor_arr1,$vendor_arr);
-                }
+					//get all vendor images
+                        $get_all_vendor_images = "SELECT `ply_vendors_notes_1notes_idb`,D.`photo_category_c` FROM `ply_vendors` A join `ply_vendors_notes_1_c` B on A.id = B.`ply_vendors_notes_1ply_vendors_ida` join `notes` C on C.id = B.`ply_vendors_notes_1notes_idb` join `notes_cstm` D on C.id=D.id_c where A.deleted=0 and C.deleted=0 and B.deleted=0 and A.`id`='".$row11['id']."'";
+	                    $mysql_query_1_1 =  $this->mysqli->query($get_all_vendor_images);
+	                   
+	                    while($row15 = mysqli_fetch_assoc($mysql_query_1_1))
+	                    { 
+
+	                       $vendor_arr['vendor_images'][$row15['photo_category_c']] = UPLOAD_URL .$row15['ply_vendors_notes_1notes_idb'];
+	                      
+	                    }
+
+					if(!empty($vendor_arr))
+	                {
+	                	array_push($vendor_arr1,$vendor_arr);
+	                }
+	            }
 		    }	
 		    return $vendor_arr1;
 
@@ -662,7 +702,7 @@ class DB
 
 	                
 	               $vendor_arr = $this->get_vendor_name_from_kitchen($kitchen_id);
-	               $resArr1['vendor_name'] = $vendor_arr['name'];
+	               $resArr1['vendor_name'] = trim($vendor_arr['name']);
 	               $resArr1['vendor_id'] = $vendor_arr['vendor_id'];
 	               $resArr1['vendor_row_id'] = $vendor_arr['vendor_row_id'];
 	                	//get all vendor images

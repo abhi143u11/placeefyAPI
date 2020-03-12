@@ -445,3 +445,80 @@ Array
         )
 
 )
+
+socialmediaregistration Result at 2020-01-24 17:33:25 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-01-25 15:17:07 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-01-31 16:21:26 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-02-09 16:43:15 :-
+Array
+(
+    [client_name] => Vishvesh ujawane
+    [email_address] => vishveshu143@gmail.com
+    [social_unique_id] => 100285219651164373936
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-02-09 18:13:40 :-
+Array
+(
+    [client_name] => Vishvesh ujawane
+    [email_address] => vishveshu143@gmail.com
+    [social_unique_id] => 100285219651164373936
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-02-09 20:33:15 :-
+Array
+(
+    [client_name] => Vishvesh ujawane
+    [email_address] => vishveshu143@gmail.com
+    [social_unique_id] => 100285219651164373936
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)
+
+socialmediaregistration Result at 2020-02-10 20:55:02 :-
+Array
+(
+    [client_name] => Vishvesh ujawane
+    [email_address] => vishveshu143@gmail.com
+    [social_unique_id] => 100285219651164373936
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => 
+)

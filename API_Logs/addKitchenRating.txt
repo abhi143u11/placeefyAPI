@@ -1,0 +1,54 @@
+
+addKitchenRating Result at 2020-03-11 18:02:53 :-
+Array
+(
+    [client_id] => 1
+    [kitchen_id] => 1
+    [rating] => 2
+    [review] => pppppppppppppp
+)
+
+addKitchenRating Result at 2020-03-11 18:03:22 :-
+Array
+(
+    [client_id] => 1
+    [kitchen_id] => 1
+    [rating] => 244
+    [review] => pppppppppppppp
+)
+
+addKitchenRating Result at 2020-03-11 18:03:26 :-
+Array
+(
+    [client_id] => 1
+    [kitchen_id] => 1
+    [rating] => 244
+    [review] => pppppppppppppp
+)
+
+addKitchenRating Result at 2020-03-11 18:03:28 :-
+Array
+(
+    [client_id] => 1
+    [kitchen_id] => 1
+    [rating] => 244
+    [review] => pppppppppppppp
+)
+
+addKitchenRating Result at 2020-03-11 18:03:29 :-
+Array
+(
+    [client_id] => 1
+    [kitchen_id] => 1
+    [rating] => 244
+    [review] => pppppppppppppp
+)
+
+addKitchenRating Result at 2020-03-11 18:06:36 :-
+Array
+(
+    [client_id] => 9e716b2a-8986-0a3e-c710-1444bbbfc6da
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+    [rating] => 4
+    [review] => nice food
+)

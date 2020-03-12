@@ -1,0 +1,105 @@
+
+getKitchenDetails Result at 2020-03-11 15:36:11 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:38:01 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:42:56 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:45:20 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:52:11 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:53:04 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:55:54 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:55:57 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:56:21 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:57:07 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:57:11 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 15:59:45 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 16:03:21 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+getKitchenDetails Result at 2020-03-11 16:04:18 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)
+
+makeKitchenFavourite Result at 2020-03-11 18:02:14 :-
+Array
+(
+    [client_id] => 276b40c2-3688-e4c6-3ba8-5e134e59ff5a
+    [kitchen_id] => 3fa9802b-1fb5-09cd-1343-5e5e668fcfc3
+)

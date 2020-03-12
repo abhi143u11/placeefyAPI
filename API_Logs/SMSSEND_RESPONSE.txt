@@ -109,3 +109,19 @@ Array
         )
 
 )
+
+SMSSEND_RESPONSE Result at 2020-02-14 16:47:47 :-for 9579337525 is:
+SMSSEND_RESPONSE Result at 2020-02-14 16:47:47 :-
+Array
+(
+    [0] => stdClass Object
+        (
+            [responseCode] => Message SuccessFully Submitted
+        )
+
+    [1] => stdClass Object
+        (
+            [msgid] => 28240428
+        )
+
+)
