@@ -597,7 +597,7 @@ class DB
 		    $mysql_query =  $this->mysqli->query($get_vendor_details);			
 		    while($row11 = $mysql_query->fetch_assoc())
 		    {
-		    	$check_vendor_kitchens = "SELECT A.`id`,C.`name` FROM `ply_vendors` A join `ply_vendors_ply_kitchen_1_c` B on A.`id` = B.`ply_vendors_ply_kitchen_1ply_vendors_ida` join ply_kitchen C on B.`ply_vendors_ply_kitchen_1ply_kitchen_idb` = C.`id` WHERE `ply_vendors_ply_kitchen_1ply_vendors_ida`='".$row11['id']."' and A.deleted=0 and B.deleted=0";
+		    	$check_vendor_kitchens = "SELECT A.`id`,C.`id` as kitchenID,C.`name`,`kitchen_id`,`regular_meal_min_price_c`,`regular_meal_max_price_c` FROM `ply_vendors` A join `ply_vendors_ply_kitchen_1_c` B on A.`id` = B.`ply_vendors_ply_kitchen_1ply_vendors_ida` join ply_kitchen C on B.`ply_vendors_ply_kitchen_1ply_kitchen_idb` = C.`id` join `ply_kitchen_cstm` D on C.id=D.id_c WHERE `ply_vendors_ply_kitchen_1ply_vendors_ida`='".$row11['id']."' and A.deleted=0 and B.deleted=0";
 		    	$count = $this->db_num($check_vendor_kitchens);
 		    	if($count==1)
 		    	{
@@ -607,6 +607,7 @@ class DB
 					$vendor_arr['name'] = $row11['name'];
 					$vendor_arr['kitchen_name'] = $row12['name'];
 					$vendor_arr['vendor_id'] = $row11['vendor_id'];
+					$vendor_arr['kitchen_id'] = $row12['kitchen_id'];
 					$vendor_arr['date_entered'] = $row11['date_entered'];
 					$vendor_arr['description'] = $row11['description'];
 					$vendor_arr['website'] = $row11['website'];
@@ -620,6 +621,25 @@ class DB
 					$vendor_arr['primary_address_postalcode'] = $row11['primary_address_postalcode'];
 					$vendor_arr['primary_address_country'] = $row11['primary_address_country'];
 					$vendor_arr['about_vendor'] = $row11['about_vendor'];
+					$vendor_arr['oneTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['oneTiffinCost'];
+					$vendor_arr['MonthTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['MonthTiffinCost'];
+
+					$rating = array();
+	                $get_kitchen_ratings = "SELECT `rating` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='".$row12['kitchenID']."'";
+	                $mysql_query_1_2 =  $this->mysqli->query($get_kitchen_ratings);
+	                while($row16 = mysqli_fetch_assoc($mysql_query_1_2))
+	                { 
+
+	                   $rating[] = $row16['rating'];
+	                }
+
+	                $rating_avg = array_sum($rating) / count(array_filter($rating));
+	                if(is_nan($rating_avg))
+	                {
+	                	$rating_avg = 0;
+	                }
+
+	                $vendor_arr['rating'] = number_format($rating_avg, 1, '.', '');
 					//$vendor_arr['image'] = $this->get_image_from_notes_module($row11['id'],$parent_type);
 
 					//get all vendor images
@@ -632,7 +652,12 @@ class DB
 	                       $vendor_arr['vendor_images'][$row15['photo_category_c']] = UPLOAD_URL .$row15['ply_vendors_notes_1notes_idb'];
 	                      
 	                    }
-
+	                // add kitchen best value package code
+	                $get_best_value_kit_pack = "SELECT * FROM `ply_package` A join `ply_package_cstm` B on A.id=B.id_c join `ply_kitchen_ply_package_1_c` C on A.`id`=C.`ply_kitchen_ply_package_1ply_package_idb` WHERE `ply_kitchen_ply_package_1ply_kitchen_ida`='".$row12['kitchenID']."' and A.deleted=0 and C.deleted=0 and B.`best_value_c`=1";
+	                $mysql_query_1_1_2 =  $this->mysqli->query($get_best_value_kit_pack);
+	                $row18 = mysqli_fetch_assoc($mysql_query_1_1_2);
+	                //$best_value_pac_nm = $row18['name'];
+	                $vendor_arr['best_value_package'] = (!empty($row18['name'])?$row18['name']:'Not available');
 					if(!empty($vendor_arr))
 	                {
 	                	array_push($vendor_arr1,$vendor_arr);
