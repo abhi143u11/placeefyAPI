@@ -131,7 +131,7 @@ $app->map(['POST'],'/socialmediaregistration', function( $request,$response,$arg
                 header('Content-Type: application/json; charset=utf-8');
                 header("Access-Control-Allow-Origin: *");
                  require '../includes/DBOperations.php';
-                 $directory = __DIR__ . '/images';
+                $directory = __DIR__ . '/images';
                 $client_name =  $request->getParam('client_name');
                 $email_address = $request->getParam('email_address');
                 $social_unique_id = $request->getParam('social_unique_id');
@@ -182,13 +182,14 @@ $app->map(['POST'],'/socialmediaregistration', function( $request,$response,$arg
                             $basename = bin2hex(random_bytes(8)); // see http://php.net/manual/en/function.random-bytes.php
                             $filename = sprintf('%s.%0.8s', $basename, $extension);
 
+
                             $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
 
                             //$filename = moveUploadedFile($directory, $uploadedFile);
                             $response->write('uploaded ' . $filename . '<br/>');
                         }
-                        
-                        $custom_query = "INSERT INTO `accounts_cstm`(`id_c`, `password_c`, `gateway_c`, `social_footprint_c`, `last_login_c`, `ip_address_c`, `social_unique_id_c`, `image_path_c`) VALUES ('$uuid','$mypassword','" . GATEWAY . "','$social_type','$datetime','$user_ip',' $social_unique_id','$directory')";
+                       
+                        $custom_query = "INSERT INTO `accounts_cstm`(`id_c`, `password_c`, `gateway_c`, `social_footprint_c`, `last_login_c`, `ip_address_c`, `social_unique_id_c`, `image_path_c`) VALUES ('$uuid','$mypassword','" . GATEWAY . "','$social_type','$datetime','$user_ip',' $social_unique_id','$filename')";
                         $db->execute( $custom_query);
                         $db->get_update_entity_email_address($uuid,$email_address,'update');
 
@@ -1140,7 +1141,7 @@ $app->map(['POST'],'/homeScreen', function( $request,$response,$args) {
                     
                
                     // First code for offer start
-                     $offer_qry = "SELECT `id`,`name`,`date_entered`,`description`,`offer_from`,`offer_to`,`offer_type`,`offer_amount_discount`,`offer_given_by`,`offer_status`,`offer_avail_count`,`offer_expenditure`,`offer_for`,`offer_applicable_over_amount`,`offer_display_type`,`offer_upto_c` FROM `ply_offer` as A inner join `ply_offer_cstm` as B on A.id=B.id_c WHERE A.deleted=0 and `offer_status`='active'";
+                     $offer_qry = "SELECT `id`,`name`,`date_entered`,`description`,`offer_from`,`offer_to`,`offer_type`,`offer_amount_discount`,`offer_given_by`,`offer_status`,`offer_avail_count`,`offer_expenditure`,`offer_for`,`offer_applicable_over_amount`,`offer_display_type`,`offer_upto_c` FROM `ply_offer` as A inner join `ply_offer_cstm` as B on A.id=B.id_c WHERE A.deleted=0 and `offer_status`='active' and CURDATE() >=`offer_from` and CURDATE() <=`offer_to`";
                             //end
                         if($db->db_num($offer_qry))
                         {
@@ -1188,7 +1189,7 @@ $app->map(['POST'],'/homeScreen', function( $request,$response,$args) {
                                     'newest_kitchen'=>$db->get_kitchen('new','no',$latitude,$longitude),
                                     'meal_of_the_day'=>$db->get_all_todays_special_menus($latitude,$longitude),
                                     'top_rated_kitchens'=>$db->get_kitchen('top_rated','no',$latitude,$longitude),
-                                    'trending_chef'=>$db->get_all_vendors()
+                                    'trending_chef'=>$db->get_all_vendors($latitude,$longitude)
                                             )
                                         );
 
@@ -1365,5 +1366,99 @@ $app->map(['POST'],'/addKitchenRating', function( $request,$response,$args) {
   $app->response()->status(404);
 } 
 });
+$app->map(['POST'],'/getSpecificPackageDetails', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';
+                $package_id =  $request->getParam('package_id');
+
+                //validate parameters
+                $package_id = $rest->validateParameter('package_id', $package_id, STRING);
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'getSpecificPackageDetails.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('package_id'=>$package_id);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\ngetSpecificPackageDetails Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);  
+                fclose($handle);             
+                //****************ENd OF Code*****************
+
+                $fetch_package = "SELECT `id` FROM `ply_package` WHERE `id`='$package_id' and deleted=0 and `package_status`='active'";
+                if($db->db_num($fetch_package))
+                 {
+
+                        return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>$db->get_specific_package_details($package_id)]);
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Package details not available for this package id']);
+                 }
+
+
+
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+$app->map(['POST'],'/getAllKitchens', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php';            
+                $response = $db->get_all_kitchens();
+                if(!empty($response))
+                 {
+
+                        return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>$response]);
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Kitchens not available']);
+                 }
+
+
+
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+$app->map(['POST'],'/getKitchensFromOffer', function( $request,$response,$args) {
+  try {
+                require '../includes/DBOperations.php'; 
+
+                $offer_id =  $request->getParam('offer_id');
+
+                //validate parameters
+                $offer_id = $rest->validateParameter('offer_id', $offer_id, STRING);
+                
+                //****************LOG Creation*********************
+                $APILogFile = $config['api_log_file_path'].'getKitchensFromOffer.txt';
+                $handle = fopen($APILogFile, 'a');
+                $timestamp = date('Y-m-d H:i:s');
+                $logArray = array('offer_id'=>$offer_id);
+                $logArray1 = print_r($logArray, true);
+                $logMessage = "\ngetKitchensFromOffer Result at $timestamp :-\n$logArray1";
+                fwrite($handle, $logMessage);  
+                fclose($handle);             
+                //****************ENd OF Code*****************           
+                $fetch_offer = "SELECT `id` FROM `ply_offer` A join `ply_offer_cstm` B on A.id=B.id_c WHERE A.deleted=0 and `id`=TRIM('$offer_id')";
+                 
+                if($db->db_num($fetch_offer))
+                 {
+                    $respone = $db->get_offer_related_kitchens($offer_id);
+                    if(!empty($respone)){
+                        return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => true, 'result'=>$respone]);
+                    }
+                    else{
+                        return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'No kitchens are available for this offer']);
+                    }
+
+                 }else{
+
+                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'Offer id is not available']);
+                 }
+    } catch (ResourceNotFoundException $e) { 
+  $app->response()->status(404);
+} 
+});
+
 
 });

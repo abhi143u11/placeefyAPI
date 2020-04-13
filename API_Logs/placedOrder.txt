@@ -1,0 +1,762 @@
+
+placedOrder Result at 2020-04-12 17:38:06 :-
+
+placedOrder Result at 2020-04-12 17:38:21 :-
+
+placedOrder Result at 2020-04-12 17:38:55 :-
+
+placedOrder Result at 2020-04-12 17:56:30 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+)
+
+placedOrder Result at 2020-04-12 17:56:48 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+)
+
+placedOrder Result at 2020-04-12 17:57:28 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+)
+
+placedOrder Result at 2020-04-12 18:07:35 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:11:10 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:27:23 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:30:42 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:33:50 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:36:36 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:36:54 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+placedOrder Result at 2020-04-12 18:41:11 :-
+Array
+(
+    [addon] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 6bfbad47-eead-f3eb-3c1b-5e47c646a779
+                    [name] => Gulab Jamun
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [id] => 6bd97db2-fd1e-475a-c5c4-5e25df24d835
+                    [name] => Tissue Paper
+                    [quantity] => 1
+                )
+
+        )
+
+    [dinnerDeliveryTime] => Array
+        (
+            [id] => a0672c95-98d5-5fe0-9a4d-5e6ca0f203dc
+            [time] => 8:30 pm to 9:30 pm
+        )
+
+    [finalPrice] => 1980
+    [lunchDeliveryTime] => Array
+        (
+            [id] => 4d4f0204-f3d0-1f6c-4ca6-5e6c9e7e489a
+            [time] => 11:30 am to 1:00 pm
+        )
+
+    [mealTime] => Lunch
+    [mealType] => veg
+    [packageDuration] => 1 Month-30 Days
+    [packageDurationNumber] => 30
+    [packagingType] => Array
+        (
+            [id] => 
+            [name] => Insulated Tiffin Box
+        )
+
+    [sendOnSaturday] => 1
+    [sendOnSunday] => 1
+    [specialRequest] => 
+    [order_category] => 
+    [offer_id] => 
+    [customer_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [kitchen_id] => dc70b646-0d56-32a0-2d2d-5e1dee8eb7a9
+    [cust_address_id] => 51b2d2ce-2f04-437e-c2c9-27b3f7cb4d05
+    [package_id] => 6b1f9fcd-ca06-90c4-fc1c-5e790d130320
+    [start_date] => 2020-04-12
+    [end_date] => 2020-05-11
+    [city] => nagpur
+    [discounted_price] => 0.00
+    [delivery_price] => 0.00
+    [deposition_amount] => 0.00
+    [packaging_charges] => 300.00
+    [service_charges] => 0.00
+    [online_pay_received_amt] => 1980.00
+    [online_pay_received_status] => success
+    [placeefy_instant_check] => 
+    [payment_mode] => UPI
+    [delivery_time] => lunch
+)
+
+No Main delivery boys avaialble in DB
+No Alternate delivery boys avaialble in DB
+if all get blank it assigned default delivery boy
+placedOrder Result at 2020-04-12 18:41:11 :-
+Array
+(
+    [default_delivery_boy_id] => cae497f8-6c52-f3df-85d8-5e788d272a47
+)
+
+placedOrder Result at 2020-04-12 21:41:08 :-

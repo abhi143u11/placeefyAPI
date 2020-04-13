@@ -5,69 +5,35 @@ $app->group('/api', function(\Slim\App $app) {
     
     $app->map(['POST'],'/placedOrder', function( $request,$response,$args) {
         try {
-                require_once('dbconnect.php');
-                if(defined('SECRETE_KEY'))
-                {
-                                       
-                   $merchant_id =  $request->getParam('merchant_id');
-                   $client_id =  $request->getParam('client_id');
-                   $cart_ids =  $request->getParam('cart_ids');             //separated by commas
-                   $payment_type =  $request->getParam('payment_type');
-                   $delivery_date =  $request->getParam('delivery_date');
-                   $delivery_time =  $request->getParam('delivery_time');
-                   $delivery_address =  $request->getParam('delivery_address');
-                   $voucher_code =  $request->getParam('voucher_code');
-                   $json_details =  $request->getParam('json_details');    //optional
-                   $discounted_amount =  $request->getParam('discounted_amount');
+                   require '../includes/DBOperations.php';
+                                   
+                   $order_object =  $request->getParam('order_object');
+                   $Order_data = json_decode($order_object,true);
+                   
+                   if(is_array($Order_data) && empty($Order_data))
+                   {
+                    return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => 'false','result'=>'order_object should not be blank.']);
+                    exit;
+                   }
+                   //echo "dddd";
 
+        					//****************LOG Creation*********************
+        					$APILogFile = $config['api_log_file_path'].'placedOrder.txt';
+        					$handle = fopen($APILogFile, 'a');
+        					$timestamp = date('Y-m-d H:i:s');
+        					$logArray1 = print_r($Order_data, true);
+        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+        					fwrite($handle, $logMessage);				
+        					fclose($handle);
+        				   //****************ENd OF Code*****************
 
-                   $merchant_id = $rest->validateParameter('merchant_id', $merchant_id, INTEGER);
-                   $client_id = $rest->validateParameter('client_id', $client_id, INTEGER);
-                   $cart_ids = $rest->validateParameter('cart_ids', $cart_ids, STRING);
-                   $payment_type = $rest->validateParameter('payment_type', $payment_type, STRING);
-                   $delivery_date = $rest->validateParameter('delivery_date', $delivery_date, STRING);
-                   $delivery_time = $rest->validateParameter('delivery_time', $delivery_time, STRING);
-                   $delivery_address = $rest->validateParameter('delivery_address', $delivery_address, STRING);
-                   $voucher_code = $rest->validateParameter('voucher_code', $voucher_code, STRING,false);
-                   $json_details = $rest->validateParameter('json_details', $json_details, STRING, false);
-                   $discounted_amount = $rest->validateParameter('discounted_amount', $discounted_amount, INTEGER, false);
-                   $order_data = array();
-                   $order_data = array('merchant_id'=> $merchant_id,
-                                        'client_id'=> $client_id,
-                                        'cart_ids'=> $cart_ids,
-                                        'payment_type'=> $payment_type,
-                                        'delivery_date'=> $delivery_date,
-                                        'delivery_address'=> $delivery_address,
-                                        'delivery_time'=> $delivery_time,
-                                        'voucher_code'=> $voucher_code,
-                                        'json_details'=> $json_details,
-                                        'discounted_amount'=> $discounted_amount             
-                                     );
-									 
-					//****************LOG Creation*********************
-					$APILogFile = 'placedOrder.txt';
-					$handle = fopen($APILogFile, 'a');
-					$timestamp = date('Y-m-d H:i:s');
-					$logArray1 = print_r($order_data, true);
-					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
-					fwrite($handle, $logMessage);				
-					fclose($handle);
-				   //****************ENd OF Code*****************
-
-                   $result = $db->placed_order($order_data);
+                   $result = $db->placed_order($Order_data);
                    if(!empty($result)){
                     return $this->response->withJson(['statuscode' => SUCCESS_RESPONSE, 'responseMessage' => 'true','result'=> $result]);
                     }else{
                         return $this->response->withJson(['statuscode' => NO_CONTENT, 'responseMessage' => 'false','result'=>'Sorry No order has been placed']);
                     }
                    
-
-                        
-                }else{
-                    return $this->response->withJson(['statuscode' => ACCESS_TOKEN_ERRORS, 'responseMessage' => 'false','result'=>NULL]);
-                }
-
-
 
         } catch (ResourceNotFoundException $e) { 
 		$app->response()->status(404);

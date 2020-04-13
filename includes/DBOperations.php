@@ -113,8 +113,6 @@ class DB
 	                    $insert_email_address_bean_rel = "INSERT INTO `email_addr_bean_rel`(`id`, `email_address_id`, `bean_id`, `bean_module`, `primary_address`, `reply_to_address`, `date_created`, `date_modified`) VALUES ('$uuid','$email_address_id','$customer_id','Accounts','1','0','$datetime','$datetime')";
 	                    $mysql_query12 =  $this->mysqli->query($insert_email_address_bean_rel);
 
-
-
 	             }
            }
 
@@ -174,7 +172,7 @@ class DB
                    `regular_meal_max_price_c` FROM `ply_kitchen` a join 
                   `ply_kitchen_cstm` b on a.id=b.id_c WHERE a.deleted=0 and 
                   `is_sponsored_c`='$is_sponserd' and `kitchen_business_type_c`=
-                        '$kitchen_type'";
+                        '$kitchen_type' and `status_c`='active'";
             if($this->db_num($get_sponsored_kitchen))
             {
                     		
@@ -199,21 +197,26 @@ class DB
 	                       	 case 'veg' : 
 	                       	 				$resArr1['veg'] = true;
 	                       	 				$resArr1['nonveg'] = false;
+	                       	 				$resArr1['egg'] = false;
 	                       	 				break;
 	                       	 case 'nonveg' :
 	                       	 				$resArr1['veg'] = false;
 	                       	 				$resArr1['nonveg'] = true;
+	                       	 				$resArr1['egg'] = true;
 	                       	 				break;
 	                       	 case 'egg' : 
 	                       	 				$resArr1['veg'] = false;
 	                       					$resArr1['nonveg'] = true;
+	                       					$resArr1['egg'] = true;
 	                       	 				break;
 	                       	 case 'veg_nonveg':
 	                       	 					$resArr1['veg'] = true;
 	                       	 					$resArr1['nonveg'] = true;
+	                       	 					$resArr1['egg'] = true;
 	                       	 default:
 	                       	  		  $resArr1['veg'] = false;
 	                       	  		  $resArr1['nonveg'] = false;
+	                       	  		  $resArr1['egg'] = false;
 	                    	}
 
 	                       $resArr1['kitchen_id'] = $row13['kitchen_id'];
@@ -271,7 +274,7 @@ class DB
 	                    $kitchen_sup_id = $row13['ply_kitchen_supervisor_id_c'];
 	                    $resArr1['kitchen_supervisor_name'] = $this->get_kitchen_supervisor_name($kitchen_sup_id);
 
-	                    $price_arr = $this->calculate_monthly_tiffin_price($kitchen_id);
+	                    $price_arr = $this->calculate_monthly_tiffin_price($kitchen_id,$row13['kitchen_type']);
 	                    $resArr1['single_tiffin_cost'] = $price_arr['oneTiffinCost'];
 	                    $resArr1['Monthly_tiffin_cost'] = $price_arr['MonthTiffinCost'];
 	                    
@@ -353,7 +356,7 @@ class DB
 		    	return array('vendor_row_id'=>$row_id,'name'=>$vendor_name,'vendor_id'=>$vendor_id);
 		    }
 	    }
-	    public function calculate_monthly_tiffin_price($kitchen_id)
+	    public function calculate_monthly_tiffin_price($kitchen_id,$kitchen_type=null)
 	    {
 	    	$resArr = array();
 	    	$get_min_max_kitchen_price = "SELECT `regular_meal_min_price_c`,`regular_meal_max_price_c` FROM `ply_kitchen` A join `ply_kitchen_cstm` B on A.id=B.id_c WHERE `id`='$kitchen_id'";
@@ -363,7 +366,7 @@ class DB
 		    $regular_meal_max_price = (isset($row11['regular_meal_max_price_c'])?$row11['regular_meal_max_price_c']:0.00);
 		    $values_arr =  array($regular_meal_min_price,$regular_meal_max_price);
 		    $average = array_sum($values_arr)/count(array_filter($values_arr));
-            $resArr = $this->get_monthly_cost_incurred(30,60,'lunch_and_Dinner',$pure_veg_flag=null);
+            $resArr = $this->get_monthly_cost_incurred(30,60,'lunch_and_Dinner',$kitchen_type);
             $no_of_tiffins_to_deliver = $resArr['no_of_tiffins_to_deliver'];
             $total_cost_incurred      = $resArr['total_cost_incurred'];
             $profit_margin_per_tiffin = $resArr['profit_margin_per_tiffin'];
@@ -382,7 +385,26 @@ class DB
 	    }
 	    public function get_monthly_cost_incurred($no_of_days_deliveries,$no_of_tiffins_to_delivers,$delivery_time,$pure_veg_flag=null)
 	    {
-	    	$get_monthly_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin`,`no_of_tiffins_to_deliver` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE A.deleted=0 and `no_of_days_deliveries`=$no_of_days_deliveries and `no_of_tiffins_to_deliver`=$no_of_tiffins_to_delivers and `delivery_time`='$delivery_time' limit 1";
+	    	if($pure_veg_flag=='veg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=1';
+	    	}else if($pure_veg_flag=='nonveg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=0';
+	    	}
+	    	else if($pure_veg_flag=='veg_nonveg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=1';
+	    	}
+	    	else if($pure_veg_flag=='egg')
+	    	{
+ 				$pure_veg = " and `pure_veg_c`=0";
+	    	}else{
+	    		$pure_veg = " and `pure_veg_c`=''";
+	    	}
+	    	
+	    	$get_monthly_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin`,`no_of_tiffins_to_deliver` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE A.deleted=0 and `no_of_days_deliveries`=$no_of_days_deliveries and `no_of_tiffins_to_deliver`=$no_of_tiffins_to_delivers and `delivery_time`='$delivery_time' $pure_veg limit 1";
+	    	
 	    	$mysql_query =  $this->mysqli->query($get_monthly_cost);
 		    $row11 = $mysql_query->fetch_assoc();				
 		    $total_cost_incurred = (isset($row11['total_cost_incurred_c'])?$row11['total_cost_incurred_c']:0.00);
@@ -589,79 +611,89 @@ class DB
 		    $deliverable_time = (isset($row11['deliverable_time'])?$row11['deliverable_time']:"NA");
 		    return array('name'=>$name,'category'=>$category,'quantity'=>$quantity,'price'=>$price,'deliverable_time'=>$deliverable_time);
 	    }
-	    public function get_all_vendors()
+	    public function get_all_vendors($lat1,$long1)
 	    {
 	    	$vendor_arr =  array();$vendor_arr1 =  array();
 	    	$parent_type = 'ply_Vendors';
-	    	$get_vendor_details= "SELECT A.`id`,Concat(Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name,`vendor_id`,`date_entered`,`description`,`website`,`team_size`,`city_name_c`,`phone_mobile`,`phone_work`,`primary_address_street`,`primary_address_city`,`primary_address_state`,`primary_address_postalcode`,`primary_address_country`,`about_vendor` FROM `ply_vendors` A join `ply_vendors_cstm` B on A.id=B.id_c join `ply_vendors_ply_kitchen_1_c` C on A.id=C.ply_vendors_ply_kitchen_1ply_vendors_ida where A.deleted=0 and C.deleted=0 group by id";
+	    	$get_vendor_details= "SELECT A.`id`,Concat(Ifnull(`first_name`,' ') ,' ', Ifnull(`last_name`,' ')) as name,`vendor_id`,`date_entered`,`description`,`website`,`team_size`,`city_name_c`,`phone_mobile`,`phone_work`,`primary_address_street`,`primary_address_city`,`primary_address_state`,`primary_address_postalcode`,`primary_address_country`,`about_vendor` FROM `ply_vendors` A join `ply_vendors_cstm` B on A.`id`=B.`id_c` join `ply_vendors_ply_kitchen_1_c` C on A.`id`=C.`ply_vendors_ply_kitchen_1ply_vendors_ida` where A.`deleted`=0 and C.`deleted`=0 and B.`status_c`='active' group by id";
 		    $mysql_query =  $this->mysqli->query($get_vendor_details);			
 		    while($row11 = $mysql_query->fetch_assoc())
 		    {
-		    	$check_vendor_kitchens = "SELECT A.`id`,C.`id` as kitchenID,C.`name`,`kitchen_id`,`regular_meal_min_price_c`,`regular_meal_max_price_c` FROM `ply_vendors` A join `ply_vendors_ply_kitchen_1_c` B on A.`id` = B.`ply_vendors_ply_kitchen_1ply_vendors_ida` join ply_kitchen C on B.`ply_vendors_ply_kitchen_1ply_kitchen_idb` = C.`id` join `ply_kitchen_cstm` D on C.id=D.id_c WHERE `ply_vendors_ply_kitchen_1ply_vendors_ida`='".$row11['id']."' and A.deleted=0 and B.deleted=0";
+		    	$check_vendor_kitchens = "SELECT A.`id`,C.`id` as kitchenID,C.`name`,`kitchen_id`,`regular_meal_min_price_c`,`regular_meal_max_price_c`,`laltitude`,`longitude` FROM `ply_vendors` A join `ply_vendors_ply_kitchen_1_c` B on A.`id` = B.`ply_vendors_ply_kitchen_1ply_vendors_ida` join ply_kitchen C on B.`ply_vendors_ply_kitchen_1ply_kitchen_idb` = C.`id` join `ply_kitchen_cstm` D on C.id=D.id_c WHERE `ply_vendors_ply_kitchen_1ply_vendors_ida`='".$row11['id']."' and A.deleted=0 and B.deleted=0";
 		    	$count = $this->db_num($check_vendor_kitchens);
 		    	if($count==1)
 		    	{
 		    		$mysql_query_1 =  $this->mysqli->query($check_vendor_kitchens);
 		    		$row12 = $mysql_query_1->fetch_assoc();
-			    	$vendor_arr['row_id'] = $row11['id'];
-					$vendor_arr['name'] = $row11['name'];
-					$vendor_arr['kitchen_name'] = $row12['name'];
-					$vendor_arr['vendor_id'] = $row11['vendor_id'];
-					$vendor_arr['kitchen_id'] = $row12['kitchen_id'];
-					$vendor_arr['date_entered'] = $row11['date_entered'];
-					$vendor_arr['description'] = $row11['description'];
-					$vendor_arr['website'] = $row11['website'];
-					$vendor_arr['team_size'] = $row11['team_size'];
-					$vendor_arr['city_name'] = $row11['city_name_c'];
-					$vendor_arr['phone_mobile'] = $row11['phone_mobile'];
-					$vendor_arr['phone_work'] = $row11['phone_work'];
-					$vendor_arr['primary_address_street'] = $row11['primary_address_street'];
-					$vendor_arr['primary_address_city'] = $row11['primary_address_city'];
-					$vendor_arr['primary_address_state'] = $row11['primary_address_state'];
-					$vendor_arr['primary_address_postalcode'] = $row11['primary_address_postalcode'];
-					$vendor_arr['primary_address_country'] = $row11['primary_address_country'];
-					$vendor_arr['about_vendor'] = $row11['about_vendor'];
-					$vendor_arr['oneTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['oneTiffinCost'];
-					$vendor_arr['MonthTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['MonthTiffinCost'];
+		    		$latitude2 = $row12['laltitude'];
+		    		$longitude2 = $row12['longitude'];
+		    		$distance = get_distance_between_points($lat1,$long1,$latitude2,$longitude2);
+					$kilometers = (float)($distance['kilometers']!='')?number_format($distance['kilometers'], 2, '.', ''):0.00;
+					$delivery_range = $this->get_assumption('DR');
 
-					$rating = array();
-	                $get_kitchen_ratings = "SELECT `rating` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='".$row12['kitchenID']."'";
-	                $mysql_query_1_2 =  $this->mysqli->query($get_kitchen_ratings);
-	                while($row16 = mysqli_fetch_assoc($mysql_query_1_2))
-	                { 
+					if($kilometers<=$delivery_range)
+					{
+				    	$vendor_arr['row_id'] = $row11['id'];
+				    	$vendor_arr['distance'] = $kilometers;
+						$vendor_arr['name'] = $row11['name'];
+						$vendor_arr['kitchen_name'] = $row12['name'];
+						$vendor_arr['vendor_id'] = $row11['vendor_id'];
+						$vendor_arr['kitchen_id'] = $row12['kitchen_id'];
+						$vendor_arr['date_entered'] = $row11['date_entered'];
+						$vendor_arr['description'] = $row11['description'];
+						$vendor_arr['website'] = $row11['website'];
+						$vendor_arr['team_size'] = $row11['team_size'];
+						$vendor_arr['city_name'] = $row11['city_name_c'];
+						$vendor_arr['phone_mobile'] = $row11['phone_mobile'];
+						$vendor_arr['phone_work'] = $row11['phone_work'];
+						$vendor_arr['primary_address_street'] = $row11['primary_address_street'];
+						$vendor_arr['primary_address_city'] = $row11['primary_address_city'];
+						$vendor_arr['primary_address_state'] = $row11['primary_address_state'];
+						$vendor_arr['primary_address_postalcode'] = $row11['primary_address_postalcode'];
+						$vendor_arr['primary_address_country'] = $row11['primary_address_country'];
+						$vendor_arr['about_vendor'] = $row11['about_vendor'];
+						$vendor_arr['oneTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['oneTiffinCost'];
+						$vendor_arr['MonthTiffinCost'] = $this->calculate_monthly_tiffin_price($row12['kitchenID'])['MonthTiffinCost'];
 
-	                   $rating[] = $row16['rating'];
-	                }
+						$rating = array();
+		                $get_kitchen_ratings = "SELECT `rating` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='".$row12['kitchenID']."'";
+		                $mysql_query_1_2 =  $this->mysqli->query($get_kitchen_ratings);
+		                while($row16 = mysqli_fetch_assoc($mysql_query_1_2))
+		                { 
 
-	                $rating_avg = array_sum($rating) / count(array_filter($rating));
-	                if(is_nan($rating_avg))
-	                {
-	                	$rating_avg = 0;
-	                }
+		                   $rating[] = $row16['rating'];
+		                }
 
-	                $vendor_arr['rating'] = number_format($rating_avg, 1, '.', '');
-					//$vendor_arr['image'] = $this->get_image_from_notes_module($row11['id'],$parent_type);
+		                $rating_avg = array_sum($rating) / count(array_filter($rating));
+		                if(is_nan($rating_avg))
+		                {
+		                	$rating_avg = 0;
+		                }
 
-					//get all vendor images
-                        $get_all_vendor_images = "SELECT `ply_vendors_notes_1notes_idb`,D.`photo_category_c` FROM `ply_vendors` A join `ply_vendors_notes_1_c` B on A.id = B.`ply_vendors_notes_1ply_vendors_ida` join `notes` C on C.id = B.`ply_vendors_notes_1notes_idb` join `notes_cstm` D on C.id=D.id_c where A.deleted=0 and C.deleted=0 and B.deleted=0 and A.`id`='".$row11['id']."'";
-	                    $mysql_query_1_1 =  $this->mysqli->query($get_all_vendor_images);
-	                   
-	                    while($row15 = mysqli_fetch_assoc($mysql_query_1_1))
-	                    { 
+		                $vendor_arr['rating'] = number_format($rating_avg, 1, '.', '');
+						//$vendor_arr['image'] = $this->get_image_from_notes_module($row11['id'],$parent_type);
 
-	                       $vendor_arr['vendor_images'][$row15['photo_category_c']] = UPLOAD_URL .$row15['ply_vendors_notes_1notes_idb'];
-	                      
-	                    }
-	                // add kitchen best value package code
-	                $get_best_value_kit_pack = "SELECT * FROM `ply_package` A join `ply_package_cstm` B on A.id=B.id_c join `ply_kitchen_ply_package_1_c` C on A.`id`=C.`ply_kitchen_ply_package_1ply_package_idb` WHERE `ply_kitchen_ply_package_1ply_kitchen_ida`='".$row12['kitchenID']."' and A.deleted=0 and C.deleted=0 and B.`best_value_c`=1";
-	                $mysql_query_1_1_2 =  $this->mysqli->query($get_best_value_kit_pack);
-	                $row18 = mysqli_fetch_assoc($mysql_query_1_1_2);
-	                //$best_value_pac_nm = $row18['name'];
-	                $vendor_arr['best_value_package'] = (!empty($row18['name'])?$row18['name']:'Not available');
-					if(!empty($vendor_arr))
-	                {
-	                	array_push($vendor_arr1,$vendor_arr);
-	                }
+						//get all vendor images
+	                        $get_all_vendor_images = "SELECT `ply_vendors_notes_1notes_idb`,D.`photo_category_c` FROM `ply_vendors` A join `ply_vendors_notes_1_c` B on A.id = B.`ply_vendors_notes_1ply_vendors_ida` join `notes` C on C.id = B.`ply_vendors_notes_1notes_idb` join `notes_cstm` D on C.id=D.id_c where A.deleted=0 and C.deleted=0 and B.deleted=0 and A.`id`='".$row11['id']."'";
+		                    $mysql_query_1_1 =  $this->mysqli->query($get_all_vendor_images);
+		                   
+		                    while($row15 = mysqli_fetch_assoc($mysql_query_1_1))
+		                    { 
+
+		                       $vendor_arr['vendor_images'][$row15['photo_category_c']] = UPLOAD_URL .$row15['ply_vendors_notes_1notes_idb'];
+		                      
+		                    }
+		                // add kitchen best value package code
+		                $get_best_value_kit_pack = "SELECT * FROM `ply_package` A join `ply_package_cstm` B on A.id=B.id_c join `ply_kitchen_ply_package_1_c` C on A.`id`=C.`ply_kitchen_ply_package_1ply_package_idb` WHERE `ply_kitchen_ply_package_1ply_kitchen_ida`='".$row12['kitchenID']."' and A.deleted=0 and C.deleted=0 and B.`best_value_c`=1";
+		                $mysql_query_1_1_2 =  $this->mysqli->query($get_best_value_kit_pack);
+		                $row18 = mysqli_fetch_assoc($mysql_query_1_1_2);
+		                //$best_value_pac_nm = $row18['name'];
+		                $vendor_arr['best_value_package'] = (!empty($row18['name'])?$row18['name']:'Not available');
+						if(!empty($vendor_arr))
+		                {
+		                	array_push($vendor_arr1,$vendor_arr);
+		                }
+		            }
 	            }
 		    }	
 		    return $vendor_arr1;
@@ -692,7 +724,7 @@ class DB
 	                $resArr1['row_id']	= $row13['id']; 
 	                $resArr1['name'] 	= ucfirst($row13['name']);
 	                $resArr1['date_entered'] = $row13['date_entered'];
-	                $resArr1['description'] = $row13['description'];
+	                $resArr1['description'] = w1250_to_utf8($row13['description']);
 	                $resArr1['kitchen_type'] = ucfirst($row13['kitchen_type']);
 	                $resArr1['kitchen_id'] = $row13['kitchen_id'];
 	                $resArr1['plot_no'] = $row13['plot_no'];
@@ -744,7 +776,7 @@ class DB
 	                	//end
 	                $kitchen_sup_id = $row13['ply_kitchen_supervisor_id_c'];
 	                $resArr1['kitchen_supervisor_name'] = $this->get_kitchen_supervisor_name($kitchen_sup_id);
-					$price_arr = $this->calculate_monthly_tiffin_price($kitchen_id);
+					$price_arr = $this->calculate_monthly_tiffin_price($kitchen_id,$row13['kitchen_type']);
 	                $resArr1['single_tiffin_cost'] = $price_arr['oneTiffinCost'];
 	                $resArr1['Monthly_tiffin_cost'] = $price_arr['MonthTiffinCost'];
 	                $get_all_kitchen_images = "SELECT `id`,`photo_category_c`,`parent_id` FROM `notes` a join `notes_cstm` b on a.id=b.id_c where a.deleted=0 and `parent_type`='ply_Kitchen' and `parent_id`='$kitchen_id'";
@@ -769,17 +801,23 @@ class DB
 
 	                $rating = array();
 	                $review = array();
-	                $get_kitchen_ratings = "SELECT `rating`,`review_c`,`account_id_c` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='$kitchen_id'";
+	                $get_kitchen_ratings = "SELECT `rating`,`review_c`,`account_id_c` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='$kitchen_id' group by `account_id_c`";
+	               //exit;
 	                $mysql_query_1_2 =  $this->mysqli->query($get_kitchen_ratings);
+	                $inc = 0;
 	                while($row16 = mysqli_fetch_assoc($mysql_query_1_2))
 	                { 
-	                	$get_cust_name = "SELECT `name` FROM `accounts` WHERE deleted=0 and `id`='".$row16['account_id_c']."'";
+	                	$get_cust_name = "SELECT `name`,`image_path_c` FROM `accounts` A join `accounts_cstm` B on A.`id`=B.`id_c` WHERE deleted=0 and `id`='".$row16['account_id_c']."'";
 	                	$mysql_query_3_1 =  $this->mysqli->query($get_cust_name);
 	                	$row17 = mysqli_fetch_assoc($mysql_query_3_1);
 	                    $cust_nm = (!empty($row17['name'])?$row17['name']:'NA');
 
 	                   $rating[] = $row16['rating'];
-	                   $review[$cust_nm] = $row16['review_c'];
+	                   $resArr1['reviews'][$inc]['cust_review'] = $row16['review_c'];
+	                   $resArr1['reviews'][$inc]['cust_name'] = $cust_nm;
+	                   $resArr1['reviews'][$inc]['image'] = CUSTOMER_IMAGE_PATH . $row17['image_path_c'];
+	                   $resArr1['reviews'][$inc]['rating'] = $row16['rating'];
+	                   $inc++;
 	                }
 
 	                $rating_avg = array_sum($rating) / count(array_filter($rating));
@@ -787,9 +825,153 @@ class DB
 	                {
 	                	$rating_avg = 0;
 	                }
-
+	                $resArr1['number_of_review_count'] = (int)$inc;
 	                $resArr1['rating'] = number_format($rating_avg, 1, '.', '');
-	                $resArr1['reviews'] = $review;
+	                //get kitchen packages code
+	                $get_kitchen_packages = "SELECT `ply_kitchen_ply_package_1ply_package_idb` as package_id,`name`,`date_entered`,`description`,`package_type`,`currency_id`,`package_duration`,`package_time`,`package_status`,`best_value_c`,`package_min_price_c`,`package_max_price_c`,`package_sub_type_c`,`offer_value_c`,`offer_percentage_c`,`offer_duration_on_c`,`offer_upto_rupees_c`,`offer_status_c` FROM `ply_package` A join `ply_package_cstm` B on A.id=B.id_c join `ply_kitchen_ply_package_1_c` C on A.id = C.ply_kitchen_ply_package_1ply_package_idb WHERE A.deleted=0 and C.deleted=0 and `package_status`='active' and `ply_kitchen_ply_package_1ply_kitchen_ida`='$kitchen_id'";
+	                $mysql_query_1_3 =  $this->mysqli->query($get_kitchen_packages);
+	                $inc1 = 0;$days=30;
+	                while($row17 = mysqli_fetch_assoc($mysql_query_1_3))
+	                { 
+	                    $package_meal_min_price = $row17['package_min_price_c'];
+	                	$package_meal_max_price = $row17['package_max_price_c'];
+	                	$package_sub_type = $row17['package_sub_type_c'];
+	                	 
+	                	$values_arr =  array($package_meal_min_price,$package_meal_max_price);
+		    			$average = array_sum($values_arr)/count(array_filter($values_arr));
+		    			if(is_nan($average) || is_infinite($average))
+		    			{
+		    				$average = 0.00;
+		    			}
+		    			
+		    			if($row17['package_time']=='lunch')
+				    		$no_of_tiffins_to_deliver = 1;
+					    else if($row17['package_time']=='dinner')
+					    	$no_of_tiffins_to_deliver = 1;
+					    else if($row17['package_time']=='lunch_and_dinner')
+					    	$no_of_tiffins_to_deliver = 2;
+
+					    
+
+		                if($row17['package_type']!='trial')
+	        			{
+		                	$resArr1['packages'][$inc1]['package_type'] = $row17['package_type'];
+		                	$resArr1['packages'][$inc1]['package_id'] = $row17['package_id'];
+		                	$resArr1['packages'][$inc1]['name'] = $row17['name'];
+		                	$resArr1['packages'][$inc1]['date_entered'] = $row17['date_entered'];
+		                	$resArr1['packages'][$inc1]['description'] = w1250_to_utf8($row17['description']);
+		                	$resArr1['packages'][$inc1]['package_duration'] = str_replace('^','', $row17['package_duration']);
+		                	$resArr1['packages'][$inc1]['package_time'] = ucfirst(str_replace('_',' ',$row17['package_time']));
+		                	$resArr1['packages'][$inc1]['package_status'] = $row17['package_status'];
+		                	$resArr1['packages'][$inc1]['best_value_c'] = (($row17['best_value_c']==0)?false:true);
+		                	$resArr1['packages'][$inc1]['package_sub_type'] = $package_sub_type;
+
+		                	
+		                	$total_cost_incurred = $this->get_monthly_cost_incurred($days,$days * $no_of_tiffins_to_deliver,$row17['package_time'],$package_sub_type)['total_cost_incurred'];
+							$profit_margin_per_tiffin = $this->get_monthly_cost_incurred($days,$days * $no_of_tiffins_to_deliver,$row17['package_time'],$package_sub_type)['profit_margin_per_tiffin'];
+							
+		                	$one_tiffin_cost = ceil($average+$total_cost_incurred+$profit_margin_per_tiffin);
+                			$month_tiffin_cost = ($one_tiffin_cost * ($days * $no_of_tiffins_to_deliver));
+							$resArr1['packages'][$inc1][$row17['package_time'].'_price'] = (int) $month_tiffin_cost;
+
+		                }else{
+		                	$resArr1['packages'][$inc1]['package_type'] = $row17['package_type'];
+		                	$resArr1['packages'][$inc1]['offer_value'] = $row17['offer_value_c'];
+		                	$resArr1['packages'][$inc1]['package_id'] = $row17['package_id'];
+		                	$resArr1['packages'][$inc1]['name'] = $row17['name'];
+		                	$resArr1['packages'][$inc1]['date_entered'] = $row17['date_entered'];
+		                	$resArr1['packages'][$inc1]['description'] = w1250_to_utf8($row17['description']);
+		                	$resArr1['packages'][$inc1]['package_status'] = $row17['package_status'];
+		                	$resArr1['packages'][$inc1]['best_value_c'] = (($row17['best_value_c']==0)?false:true);
+		                	$resArr1['packages'][$inc1]['package_time'] = ucfirst(str_replace('_',' ',$row17['package_time']));
+
+
+		                }
+		                $get_trial_lunch_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE `name`='Trial Meal Lunch' and deleted=0";
+		                	$mysql_query_2_2 =  $this->mysqli->query($get_trial_lunch_cost);
+		                	$trial_lunch_row = mysqli_fetch_assoc($mysql_query_2_2);
+	               		 	$resArr1['packages'][$inc1]['trial_meal_lunch_cost'] = (int)number_format((float)$trial_lunch_row['total_cost_incurred_c'] + $trial_lunch_row['profit_margin_per_tiffin'] + $average, 2, '.', '');
+
+	               		 	$get_trial_dinner_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE `name`='Trial Meal Dinner' and deleted=0";
+		                	$mysql_query_2_3 =  $this->mysqli->query($get_trial_dinner_cost);
+		                	$trial_dinner_row = mysqli_fetch_assoc($mysql_query_2_3);
+	               		 	$resArr1['packages'][$inc1]['trial_meal_dinner_cost'] = (int)number_format((float)$trial_dinner_row['total_cost_incurred_c'] + $trial_dinner_row['profit_margin_per_tiffin'] + $average, 2, '.', '');
+
+	               		 //send package offer details start
+	               		 	if( $row17['offer_status_c']=='active')
+	               		 	{
+	               		 		$resArr1['packages'][$inc1]['offer_value'] = (int) ceil($row17['offer_value_c']);
+			                	$resArr1['packages'][$inc1]['offer_percentage'] = (int) $row17['offer_percentage_c'];
+			                	$resArr1['packages'][$inc1]['offer_duration_on'] =  str_replace('^','', $row17['offer_duration_on_c']);
+			                	$resArr1['packages'][$inc1]['offer_upto_rupees'] = (int) ceil($row17['offer_upto_rupees_c']);
+	               		 	}
+
+	               		 //end
+
+	                	$inc1++;
+
+	                } //end of while
+
+	                //get kitchen weekly menus code start here
+				        $get_kitchen_weekly_menus = "SELECT `ply_menu_master_id_c`,`serving_time`,`approval_status_c`,`meal_serving_date_c` FROM `ply_weekly_menu` A join `ply_weekly_menu_cstm` B on A.id = B.id_c join `ply_kitchen_ply_weekly_menu_1_c` C on A.id = C.`ply_kitchen_ply_weekly_menu_1ply_weekly_menu_idb` WHERE `ply_kitchen_ply_weekly_menu_1ply_kitchen_ida` = '$kitchen_id' and A.deleted=0 and C.deleted=0 and `meal_serving_date_c` >= date_sub(curdate(), interval weekday(curdate()) day) and `meal_serving_date_c` <= date_sub(curdate(), interval weekday(curdate()) - 6 day) order by `meal_serving_date_c`";
+				        $mysql_query_7 =  $this->mysqli->query($get_kitchen_weekly_menus);
+		                $inc6=0;$inc7=0;
+					    while($row24 = mysqli_fetch_assoc($mysql_query_7))
+					    {
+					    	$menu_id = trim($row24['ply_menu_master_id_c']);
+					    	$meal_serving_date = trim($row24['meal_serving_date_c']);
+					    	$serving_time = trim($row24['serving_time']);
+					    	$nameOfDay = date('l', strtotime($meal_serving_date));
+					    	$get_menu_details = "SELECT `name`,`menu_category`,`menu_type` FROM `ply_menu_master` A join `ply_menu_master_cstm` B on A.id=B.id_c WHERE `id`='$menu_id' and A.deleted=0 and `status`='active'";
+					    	$mysql_query_8 =  $this->mysqli->query($get_menu_details);
+				        	$row25 = mysqli_fetch_assoc($mysql_query_8);
+				        	$menu_name = $row25['name'];
+
+				        	//get menu image
+							$get_menu_master_imgs = "SELECT B.ply_menu_master_notes_1notes_idb FROM `ply_menu_master` A join `ply_menu_master_notes_1_c` B on A.id = B.`ply_menu_master_notes_1ply_menu_master_ida` where A.deleted=0 and B.deleted=0 and A.`id`='$menu_id'";
+		                    $mysql_query_menu_master =  $this->mysqli->query($get_menu_master_imgs); 
+		                    $row_menu_master = mysqli_fetch_assoc($mysql_query_menu_master);
+		                    
+
+				        	if($row25['menu_type'] == 'veg')
+				        	{
+				        		$resArr1['veg_weekly_menus'][$inc6]['menu_id'] = $menu_id;
+				        		$resArr1['veg_weekly_menus'][$inc6]['menu_name'] = $menu_name;
+				        		$resArr1['veg_weekly_menus'][$inc6]['serving_time'] = ucfirst(str_replace("-"," ", $serving_time));
+				        		$resArr1['veg_weekly_menus'][$inc6]['day_name'] = $nameOfDay;
+				        		if($row_menu_master['ply_menu_master_notes_1notes_idb']!='')
+		                         	$resArr1['veg_weekly_menus'][$inc6]['image'] = UPLOAD_URL .$row_menu_master['ply_menu_master_notes_1notes_idb'];
+		                   		 else
+		                       		$resArr1['veg_weekly_menus'][$inc6]['image'] = 'image not available'; 
+
+		                       	$resArr1['veg_weekly_menus'][$inc6]['veg'] = true;
+				                $resArr1['veg_weekly_menus'][$inc6]['nonveg'] = false;
+				                $resArr1['veg_weekly_menus'][$inc6]['egg'] = false;
+		                       
+				        		$inc6++;
+				        	}else if($row25['menu_type'] == 'nonveg')
+				        	{
+				        		$resArr1['nonveg_weekly_menus'][$inc7]['menu_id'] = $menu_id;
+				        		$resArr1['nonveg_weekly_menus'][$inc7]['menu_name'] = $menu_name;
+				        		$resArr1['nonveg_weekly_menus'][$inc7]['serving_time'] = ucfirst(str_replace("-"," ", $serving_time));
+				        		$resArr1['nonveg_weekly_menus'][$inc7]['day_name'] = $nameOfDay;
+				        		if($row_menu_master['ply_menu_master_notes_1notes_idb']!='')
+		                         	$resArr1['nonveg_weekly_menus'][$inc7]['image'] = UPLOAD_URL .$row_menu_master['ply_menu_master_notes_1notes_idb'];
+		                   		 else
+		                       		$resArr1['nonveg_weekly_menus'][$inc7]['image'] = 'image not available'; 
+
+		                       	$resArr1['nonveg_weekly_menus'][$inc7]['veg'] = false;
+				                $resArr1['nonveg_weekly_menus'][$inc7]['nonveg'] = true;
+				                $resArr1['nonveg_weekly_menus'][$inc7]['egg'] = true;
+				        		$inc7++;
+				        	}
+
+					    } //while loop closing
+
+
+	                	//end of code here
+
+	                //end of code here
    					
 	         } //while loop closing
 	           
@@ -919,207 +1101,7 @@ class DB
         //print_r($resArr);exit;
         return $resArr;     
     }
-    public function get_categorywiseitems($query,$category_type="all")
-    {
-      $mysql_query =  $this->mysqli->query($query);//mysqli_query($this->mysqli,$query); //query the db
-      $resArr = array(); //create the result array
-      $j=0; $result = array();$data=array();$k=0; $arr=array();
-      while($row = $mysql_query->fetch_assoc()) 
-      { 
-          $cat_id = $row['category_id'];
-          $mer_id = $row['merchant_id'];
-          $cat_name =  $this->mysqli->query("SELECT * FROM `mt_category` WHERE `id`='$cat_id'");
-          $row = $cat_name->fetch_assoc();
-          $resArr['cat_id'] =  $row['id'];
-          $resArr['category_name'] =  $row['category_name'];
-          $resArr['category_description'] =  w1250_to_utf8($row['category_description']);
-          $resArr['photo'] =  $row['photo'];
-          $resArr['status'] =  $row['status'];
-          $resArr['sequence'] =  $row['sequence'];
-          $resArr['date_created'] =  $row['date_created'];
-          $resArr['date_modified'] =  $row['date_modified'];
-          $resArr['spicydish'] =  $row['spicydish'];
-          $resArr['spicydish_notes'] =  $row['spicydish_notes'];
-          $resArr['dish'] =  $row['dish'];
-          $resArr['category_name_trans'] =  $row['category_name_trans'];
-          $resArr['category_description_trans'] =  $row['category_description_trans'];
-          $resArr['parent_cat_id'] =  $row['parent_cat_id'];
-
-
-          
-			$i=0;
-			$item_ids =  $this->mysqli->query("SELECT `item_id` FROM `mt_merchant_categories` where `category_id`='$cat_id' and `merchant_id`='$mer_id'");  
-          while($result = mysqli_fetch_assoc($item_ids))
-          {
-              $item_id = $result['item_id'];
-			  if($category_type=='all')
-			  {
-				$item_query = "SELECT `item_name`,`item_description`,`status`,`price`,`addon_item`,`cooking_ref`,`discount`,`is_featured`,`date_created`,`date_modified`,`ingredients`,`spicydish`,`two_flavors`,`two_flavors_position`,`require_addon`,`dish`,`price_type`,`item_name_trans`,`item_description_trans`,`not_available`,`points_earned`,`points_disabled`,`is_veg_nonveg`,`stock_status`,`gallery_photo`,`photo`,`price_type` from mt_item WHERE  `id`= '$item_id' and LOWER(`status`) = 'active' ORDER BY `item_name` ASC";
-			  }else{
-				  $item_query = "SELECT `item_name`,`item_description`,`status`,`price`,`addon_item`,`cooking_ref`,`discount`,`is_featured`,`date_created`,`date_modified`,`ingredients`,`spicydish`,`two_flavors`,`two_flavors_position`,`require_addon`,`dish`,`price_type`,`item_name_trans`,`item_description_trans`,`not_available`,`points_earned`,`points_disabled`,`is_veg_nonveg`,`stock_status`,`gallery_photo`,`photo` from mt_item WHERE  `id`= '$item_id' and LOWER(`status`) = 'active' and LOWER(`is_veg_nonveg`)=LOWER('$category_type') ORDER BY item_name ASC";  
-			  }
-              $item_name =  $this->mysqli->query($item_query);
-              $record = mysqli_fetch_assoc($item_name);
-			  if(!empty($record))
-			  {  
-				  $resArr['item'][$i]['item_id'] = $item_id; 
-				  $resArr['item'][$i]['item_name'] = utf8_encode($record['item_name']); 
-				  $resArr['item'][$i]['item_description'] = w1250_to_utf8($record['item_description']); 
-				  $resArr['item'][$i]['status'] = $record['status']; 
-				  $resArr['item'][$i]['addon_item'] = $record['addon_item']; 
-				  $resArr['item'][$i]['cooking_ref'] = $record['cooking_ref']; 
-				  $resArr['item'][$i]['discount'] = $record['discount']; 
-				  $resArr['item'][$i]['is_featured'] = $record['is_featured']; 
-				  $resArr['item'][$i]['date_created'] = $record['date_created']; 
-				  $resArr['item'][$i]['date_modified'] = $record['date_modified']; 
-				  $resArr['item'][$i]['ingredients'] = $record['ingredients']; 
-				  $resArr['item'][$i]['spicydish'] = $record['spicydish'];
-				  $resArr['item'][$i]['two_flavors'] = $record['two_flavors']; 
-				  $resArr['item'][$i]['two_flavors_position'] = $record['two_flavors_position'];
-				  $resArr['item'][$i]['require_addon'] = $record['require_addon'];
-				  $resArr['item'][$i]['dish'] = $record['dish'];
-				  $resArr['item'][$i]['item_name_trans'] = $record['item_name_trans'];
-				  $resArr['item'][$i]['not_available'] = $record['not_available'];
-				  $resArr['item'][$i]['points_earned'] = $record['points_earned'];
-				  $resArr['item'][$i]['points_disabled'] = $record['points_disabled'];
-				  $resArr['item'][$i]['is_veg_nonveg'] = $record['is_veg_nonveg'];
-				  $resArr['item'][$i]['images'] = $record['photo'];
-				  $resArr['item'][$i]['stock_status'] = $record['stock_status'];
-				  $resArr['item'][$i]['price_type'] = $record['price_type'];
-				  $arr = unserialize($record['price']);
-				  if(is_array($arr)){
-					  foreach((array)$arr as $key=>$value)
-					  {
-					    if(!empty($record['price_type']) && strtolower($record['price_type'])== strtolower('Single'))
-						{
-							$resArr['item'][$i][$key]= $value;
-							
-						}else{
-								$query12 = "SELECT `size_name` FROM `mt_size` WHERE `id`='$key'";
-								$result1 = $this->mysqli->query($query12); 
-								$record11 = mysqli_fetch_assoc($result1);
-								$size_name = $record11['size_name'];
-								$resArr['item'][$i][$size_name]= $value;
-							   // $k++;
-						}
-					  }
-					 } 
-				
-				  $i++;
-			  }
-			  			
-          }
-		  
-		  
-		  
-	
-          array_push($data,$resArr);
-          $j++;
-          $resArr=array();
-      }
-	  
-       //print_r($data);exit;
-      return $data;
-
-    }
-
-    public function insert_execute($query,$client_id= null,$merchant_id= null,$item_id= null,$quantity_flag= null,$item_price= null) 
-    {
-      if(isset($client_id) && isset($merchant_id) && isset($item_id) && isset($quantity_flag) && isset($item_price))
-      {
-       
-        $check_cart_item = "SELECT * FROM `mt_cart` WHERE `client_id`=TRIM('$client_id') and `merchant_id`=TRIM('$merchant_id') and `item_id`=TRIM('$item_id') and `quantity_flag`=TRIM('$quantity_flag')";
-        if($this->db_num($check_cart_item))
-        {
-			
-          $result1 = $this->mysqli->query($check_cart_item);
-          $row1 = $result1->fetch_assoc();
-		 
-			  $quantity = $row1['quantity'];
-			  $actual_item_price = $row1['item_price'];
-			  $updated_qty =  $quantity + 1;    
-			  $updated_price =  $actual_item_price + $item_price;
-			  $date_modified = date('Y-m-d H:i:s');   
-			  $update_qty_price = "UPDATE `mt_cart` SET `item_price`='$updated_price',`quantity`='$updated_qty',`datetime_modified`='$date_modified' WHERE `client_id`='$client_id' and `merchant_id`='$merchant_id' and `item_id`='$item_id' and `quantity_flag`='$quantity_flag'"; 
-			  $result = $this->mysqli->query($update_qty_price); 
-			  if ($result != false) {
-			  return 'qty_updated';
-			  }
-		  
-        }
-      else{
-		   
-		    $get_client_mid =  "SELECT `merchant_id` FROM `mt_cart` WHERE `client_id`='$client_id'";
-			if($this->db_num($get_client_mid))
-			{
-				
-				//echo $client_id;exit;
-				$result2 = $this->mysqli->query($get_client_mid);
-				$row2 = $result2->fetch_assoc();
-				if($merchant_id != $row2['merchant_id'])
-				{
-					$get_client_id =  "SELECT `client_id` FROM `mt_cart` WHERE `client_id`='$client_id'";
-					if($this->db_num($get_client_id))
-					{
-							$delete_previous_merchant = "DELETE FROM `mt_cart` WHERE `client_id`='$client_id'";
-							$this->mysqli->query($delete_previous_merchant);
-					}
-					$check_merchant_id = "SELECT `id` FROM `mt_merchant` WHERE `id`= TRIM('$merchant_id') and LOWER(`status`) = LOWER('Active')";
-					if($this->db_num($check_merchant_id))
-					{
-						$result = $this->mysqli->query($query);
-						
-						if ($result == false) {
-							
-							return false;
-						} else {
-									return $this->mysqli->insert_id;
-									 
-						}  
-					}else{
-					  return 'invalid_merchant_id';
-				  }
-				}else{
-					$check_merchant_id = "SELECT `id` FROM `mt_merchant` WHERE `id`= TRIM('$merchant_id') and LOWER(`status`) = LOWER('Active')";				
-					if($this->db_num($check_merchant_id))
-					{
-						$result = $this->mysqli->query($query);
-						
-						if ($result == false) {
-							
-							return false;
-						} else {
-									return $this->mysqli->insert_id;
-									 
-						}  
-					}
-				}
-				  
-			}else{
-						
-						$check_merchant_id = "SELECT `id` FROM `mt_merchant` WHERE `id`= TRIM('$merchant_id') and LOWER(`status`) = LOWER('Active')";
-						if($this->db_num($check_merchant_id))
-						{
-							
-							$result = $this->mysqli->query($query);
-							
-							if ($result == false) {
-								
-								return false;
-							} else {
-									return $this->mysqli->insert_id;
-									
-									
-							}  
-						}else
-						{
-						  return 'invalid_merchant_id';
-						}
-
-			}
-		}
-	  }
-  }
+    
 	
     public function apply_voucher($voucher_code,$client_id,$query) 
     {
@@ -1188,17 +1170,7 @@ class DB
                             return 'exist';
                           }
   }
-  public function get_delivery_boy_meta_keyvalue($delivery_boy_id,$meta_key) 
-    { 
-      $query = "SELECT * FROM `mt_delivery_boy_meta` WHERE `meta_key`='$meta_key' and `delivery_boy_id`='$delivery_boy_id'";
-      
-      $result = $this->mysqli->query($query);
-      $row = $result->fetch_assoc();
-       if(isset($row['meta_value']))
-        return $row['meta_value'];
-        else
-        return '';
-    }
+  
     public function get_merchant_meta_keyvalue($merchant_id,$meta_key) 
     { 
       $query = "SELECT `merchant_value` FROM `mt_merchant_meta` WHERE `merchant_key`='$meta_key' and `merchant_id`='$merchant_id'";
@@ -1210,35 +1182,7 @@ class DB
         else
         return '';
     }
-    public function update_cart_quantity($cart_id,$quantity,$item_price)
-	    {
-        $date_modified = date('Y-m-d H:i:s'); 
-        $get_cart_details = "SELECT * FROM `mt_cart` WHERE `id`='$cart_id'";
-        $result = $this->mysqli->query($get_cart_details);
-        $row = $result->fetch_assoc();
-        $quantity = ($row['quantity']>0)?$row['quantity']-1:$row['quantity']-1;
-        $item_price = ($row['item_price']>0)?$row['item_price']-$item_price:$row['item_price']-$item_price;
-	
-        if($quantity>=0 && $item_price>=0)
-        { 
-			//echo $quantity;exit;
-	      if($quantity==0)
-		  {
-			  $delete_quantity_zero_row = "DELETE FROM `mt_cart` WHERE `id`='$cart_id'";
-			  $result1 = $this->mysqli->query($delete_quantity_zero_row);
-			  if ($result1 != false) {
-					return 'qty_removed';
-					}
-		  }else{
-				  $update_qty_price = "UPDATE `mt_cart` SET `item_price`='$item_price',`quantity`='$quantity',`datetime_modified`='$date_modified' WHERE `id`='$cart_id'"; 
-					$result = $this->mysqli->query($update_qty_price); 
-					if ($result != false) {
-					return 'qty_removed';
-					}
-		  }
-        }
-	       
-      }
+    
       public function update_or_insert_loginStatus($query,$flag,$online_offline_flag,$row_id)
 	    {
         if($flag=='DeliveryBoy')
@@ -1360,197 +1304,448 @@ class DB
     }
     public function placed_order($order_info=array())
     {
-            //print_r($order_info);exit; 
-              $dayname = strtolower(date('l'));
-              $sql = "SELECT * FROM `mt_merchant_open_close` WHERE `merchant_id`='".$order_info['merchant_id']."' and LOWER(`day`) = LOWER('$dayname')";  
-              $mysql_query =  $this->mysqli->query($sql);
-              $row11 = $mysql_query->fetch_assoc();
+    		
+            $order_id = getGuid();
+            $datetime = date("Y-m-d H:i:s");
+            $dinnerDeliveryTime = $order_info['dinnerDeliveryTime']['time'];
+            $lunchDeliveryTime = $order_info['lunchDeliveryTime']['time'];
+            $start_Package_Time = $order_info['mealTime']; //lunch,dinner
+            $delivery_time = strtolower($order_info['delivery_time']); //lunch,dinner,lunch_and_Dinner
+            if(strtolower($delivery_time)==strtolower('Lunch And Dinner'))
+            {
+            	$delivery_time = 'lunch_and_Dinner';
+            }
+            $mealType = strtolower($order_info['mealType']); //nonveg ,veg,egg
+            $packageDurationNumber = $order_info['packageDurationNumber'];
+            $packaging_id = $order_info['packagingType']['id'];
+            $Delivery_on_saturday = $order_info['sendOnSaturday'];
+            if($Delivery_on_saturday==1){$Delivery_on_saturday='yes';}else{
+            	$Delivery_on_saturday='no';
+            }
+            $Delivery_on_sunday = $order_info['sendOnSunday'];
+            if($Delivery_on_sunday==1){$Delivery_on_sunday='yes';}else{
+            	$Delivery_on_sunday='no';
+            }
+            $order_category = $order_info['order_category']; //subscription,addon,cancel,renew,swap,purchase
+            if(empty($order_category)){$order_category='subscription';}
+            $offer_id = $order_info['offer_id'];
+            $customer_id = $order_info['customer_id'];
+            $kitchen_id = $order_info['kitchen_id'];
+            $cust_address_id = $order_info['cust_address_id'];
+            $package_id = $order_info['package_id'];
 
-              $get_time = "SELECT SUBSTRING_INDEX(ADDTIME(now(), '04:30:00') ,' ',-1) as time";  
-              $mysql_query1 =  $this->mysqli->query($get_time);
-              $row12 = $mysql_query1->fetch_assoc();
-			  $endTime = trim($row12['time']);
+            //start date
+            $start_date = $order_info['start_date'];
+			$startdate = str_replace('/', '-', $start_date);
+			$start_date =  date('Y-m-d', strtotime($startdate));
+			//end date
+            $end_date = $order_info['end_date'];
+            $enddate = str_replace('/', '-', $end_date);
+			$end_date = date('Y-m-d', strtotime($enddate));
 
-				// user defined function available in functions.php
-              $check_merchant_available =  check_merchant_available($endTime,$row11['start_time'],$row11['end_time'],$row11['is_open_close']); 
-			  $merchant_login_status = $this->get_merchant_meta_keyvalue($order_info['merchant_id'],'merchant_login_status');
-             if($check_merchant_available && strtolower($merchant_login_status)== strtolower('On'))
-             {         
-                    $flag =0; $get_lat_long=array();$cart_ids=array();
-                    $getmerchantdetails = "SELECT `delivery_charges`,`latitude`,`lontitude` FROM `mt_merchant` WHERE `id`='".$order_info['merchant_id']."'";
-                    $result1 = $this->mysqli->query($getmerchantdetails);
-                    $row1 = $result1->fetch_assoc();
-                    //print_r($row1);exit;
-                    if(isset($order_info['voucher_code']))
-                    {
-                      $getvoucherdetails = "SELECT `amount`,`voucher_type` FROM `mt_voucher` WHERE `voucher_name`='".$order_info['voucher_code']."'";
-                      $result2 = $this->mysqli->query($getvoucherdetails);
-                      $row2 = $result1->fetch_assoc();
-                    }
-                    //print_r($row2);exit;
-                    $voucher_amount = (isset($row2['amount'])?$row2['amount']:'');
-                    $voucher_type = (isset($row2['voucher_type'])?$row2['voucher_type']:'');;
-        
-                    $user_ip = getUserIP();
-                    $datetime = date("Y-m-d H:i:s"); 
-                    $delivery_date = date("Y-m-d", strtotime($order_info['delivery_date']) );
-                    $insert_order_details ="INSERT INTO `mt_order`(`merchant_id`,`client_id`,`json_details`,`payment_type`,`delivery_date`,`delivery_time`,`voucher_code`,`voucher_amount`,`voucher_type`,`date_created`,`ip_address`,`discounted_amount`,`request_from`) VALUES ('".$order_info['merchant_id']."','".$order_info['client_id']."','".$order_info['json_details']."','".$order_info['payment_type']."','$delivery_date','".$row12['time']."','".$order_info['voucher_code']."','$voucher_amount','$voucher_type','$datetime','$user_ip','$voucher_amount','android')";
-                    $success =  $this->mysqli->query($insert_order_details);   
-                    if($success) 
-                    {             
-                        $order_id =  $this->mysqli->insert_id;
-                        $cart_ids = explode(",",$order_info['cart_ids']);
-                        //print_r($cart_ids);exit;
-                        $item_price = array();
-                        foreach($cart_ids as $cart_id)
-                        {
-                              
-                              $item_price[] = $this->insert_order_details($cart_id,$order_id,$order_info['client_id'],$order_info['merchant_id']);
-                              
-                        }
-                        if(!empty($item_price))
-                        {
-                            //print_r($item_price);exit;
-                            $sub_total = sum_array($item_price); // user defined function available in functions.php
-                            $percentage = 18;
-                            $tax = ($percentage / 100) * $sub_total;
-                            $get_lat_long = get_details_from_address($order_info['delivery_address']);
-                            if(isset($row1['latitude']) && isset($row1['lontitude']))
-                            {
-                                $delivery_distance = get_distance_between_points($row1['latitude'],$row1['lontitude'],$get_lat_long['lat'],$get_lat_long['long']);
-                              // print_r($delivery_distance);exit;
-                              if($delivery_distance['kilometers']!='')
-                              {
-                                $getshippingrate = "SELECT `distance_from`,`distance_to`,`shipping_units`,`distance_price` FROM `mt_shipping_rate`";
-                                $result11 = $this->mysqli->query($getshippingrate);
-                                while ($record = mysqli_fetch_assoc($result11))
-                                {
-                                      $dilevery_price = calculate_delivery_charger($delivery_distance['kilometers'],$record['shipping_units'],$record['distance_price'],$record['distance_from'],$record['distance_to']);
-                                      if($dilevery_price !='' && !empty($dilevery_price))
-                                      {
-                                        $final_del_price = $dilevery_price;
-                                        break;
-                                      }
-                                }
-                              }
-                            }
-                            $discounted_amount = ($order_info['discounted_amount']!='')?number_format((float)$order_info['discounted_amount'], 2, '.', ''):number_format((float)0, 2, '.', '');
-                            $final_del_price = (isset($final_del_price)?number_format((float)$final_del_price, 2, '.', ''):number_format((float)30, 2, '.', ''));
-                            //$grand_total = number_format((float)($sub_total + $tax + $final_del_price) - $discounted_amount, 2, '.', '');
-							$grand_total = number_format((float)($sub_total + $final_del_price) - $discounted_amount, 2, '.', '');
-                            //$taxable_total = number_format((float) ($sub_total + $tax), 2, '.', '');
-							$taxable_total = number_format((float) ($sub_total), 2, '.', '');
-                            $total_w_tax = number_format((float)(float) ($sub_total + $final_del_price), 2, '.', '');
-                            $this->execute("UPDATE `mt_order` SET `sub_total`='$sub_total',`tax`='$tax', `taxable_total`='$taxable_total',`total_w_tax`='$total_w_tax',`grand_total`='$grand_total',`delivery_charge`='$final_del_price',`discounted_amount`='$discounted_amount',`date_modified`='$datetime' WHERE `order_id`='$order_id'");
-							
-                            $inert_address_details = "INSERT INTO `mt_order_delivery_address`(`order_id`, `client_id`, `street`, `city`, `state`, `zipcode`, `location_name`, `country`, `date_created`, `ip_address`, `contact_phone`, `formatted_address`, `google_lat`, `google_lng`, `area_name`) VALUES ('$order_id','".$order_info['client_id']."','".$get_lat_long['street']."','".$get_lat_long['city']."','','".$get_lat_long['postal_code']."','".$order_info['delivery_address']."','".$get_lat_long['country']."','$datetime','$user_ip','','".$get_lat_long['formatted_address']."','".$get_lat_long['lat']."','".$get_lat_long['long']."','')";
-                            $this->execute($inert_address_details);
-                            $flag =1;
-                        }  
-        
-                    }
-                    if($flag){
-						       $log_array = array('order_id'=>$order_id,'subtotal'=>$sub_total,'tax'=>number_format((float)$tax, 2, '.', ''),'taxable_total'=>$taxable_total,'total_without_tax'=>$total_w_tax,'delivery_charge'=>$final_del_price,'discounted_amount'=>$discounted_amount,'grand_total'=>$grand_total);
-						        //send push notification to merchant start
-								
-								$get_client_name = "SELECT CONCAT_WS (' ', first_name, last_name) as client_name FROM `mt_order` as A inner join `mt_client` as B on A.`client_id`=B.`client_id` WHERE `order_id`='$order_id'";
-								$mysql_query17 =  $this->mysqli->query($get_client_name);
-								$row17 = $mysql_query17->fetch_assoc();
-								$client_name = trim($row17['client_name']); 
-								$Merchant_Server_key= self::$MERCHANT_API_SERVER_KEY;
-								$message = "New Order has been placed.Order Id is-".$order_id." .Order from-".$client_name." .Subtotal of order is-".$sub_total;
-								$res = $this->fetchFirebaseTokenUsers('merchant',$order_info['merchant_id'],$message, $Merchant_Server_key); //merchant_server_api_key defined in constant .php
-									if(!is_null($res))
-									{
-										//****************LOG Creation*********************
-											$APILogFile = 'order_placed_response.txt';
-											$handle = fopen($APILogFile, 'a');
-											$timestamp = date('Y-m-d H:i:s');
-											$logArray1 = print_r($res, true);
-											$logMessage = "\npush notification sent response  Result at $timestamp :-\n$logArray1";
-											$logArray2 = print_r($log_array, true);
-											$logMessage1 = "\n\nOrder Placed response Result at $timestamp :-\n$logArray2";
-											fwrite($handle, $logMessage);
-											fwrite($handle, $logMessage1);									
-											fclose($handle);
-										//****************ENd OF Code*****************
-									//send push notification to merchant End
-									}else{
-										//****************LOG Creation*********************
-											$APILogFile = 'order_placed_response.txt';
-											$handle = fopen($APILogFile, 'a');
-											$timestamp = date('Y-m-d H:i:s');
-											$logMessage = "\npush notification sent response  Result at $timestamp :-\n NULL";
-											fwrite($handle, $logMessage);							
-											fclose($handle);
-									}
-								
-							//****************Response LOG Creation*********************
-								$APILogFile = 'placedOrder.txt';
-								$handle = fopen($APILogFile, 'a');
-								$timestamp = date('Y-m-d H:i:s');
-								$logArray = array('order_id'=>$order_id,'subtotal'=>$sub_total,'tax'=>number_format((float)$tax, 2, '.', ''),'taxable_total'=>$taxable_total,'total_without_tax'=>$total_w_tax,'delivery_charge'=>$final_del_price,'discounted_amount'=>$discounted_amount,'grand_total'=>$grand_total);
-								$logArray1 = print_r($logArray, true);
-								$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
-								fwrite($handle, $logMessage);				
-								fclose($handle);
-							//****************ENd OF Response Code*****************
-								return ['order_id'=>$order_id,'subtotal'=>$sub_total,'tax'=>number_format((float)$tax, 2, '.', ''),'taxable_total'=>$taxable_total,'total_without_tax'=>$total_w_tax,'delivery_charge'=>$final_del_price,'discounted_amount'=>$discounted_amount,'grand_total'=>$grand_total];
-						} 
-                    else{
-							return false;
-						}   
-                }else{
-						echo json_encode(array('statuscode' => NO_CONTENT, 'responseMessage' => 'false','result'=>'Sorry Merchant is not available, Please contact admin'));
-                            exit;
-                }          
+            $city = strtolower($order_info['city']);
+            $final_price = $order_info['final_price'];
+            $discounted_price = $order_info['discounted_price'];
+            $delivery_price = $order_info['delivery_price'];
+            $deposition_amount = $order_info['deposition_amount'];
+            $packaging_charges = $order_info['packaging_charges'];
+            $service_charges = $order_info['service_charges'];
+            $online_pay_received_amt = $order_info['online_pay_received_amt'];
+            $online_pay_received_status = $order_info['online_pay_received_status'];
+            $placeefy_instant_check = $order_info['placeefy_instant_check'];
+            $payment_mode = $order_info['payment_mode']; //UPI,net_banking,cash,wallet,RTGS,NEFT
+            if($placeefy_instant_check){$placeefy_instant_check=1;}else{$placeefy_instant_check=0;}
+
+
+            if($kitchen_id!='' and isset($kitchen_id))
+            {
+            		$delivery_boy_id = $this->get_delivery_boy($kitchen_id);
+            }
+
+            //create order name
+            $order_name = $this->get_name($customer_id,'accounts').' Booked '.$this->get_name($package_id,'ply_package').' Package from '.$this->get_name($kitchen_id,'ply_kitchen');
+
+            $get_package_rate_finder_id = $this->get_package_rate_finder_id($delivery_time,$packageDurationNumber,$mealType);
+            // insert order into orders placed table
+            $insert_into_main_table ="INSERT INTO `ply_orders`(`id`, `name`, `date_entered`, `date_modified`,`created_by`, `assigned_user_id`, `account_id_c`, `ply_kitchen_id_c`, `ply_package_id_c`, `ply_offer_id_c`, `order_category`, `start_date`, `expected_end_date`) VALUES ('$order_id','$order_name','$datetime','$datetime','1','1','$customer_id','$kitchen_id','$package_id','$offer_id','$order_category','$start_date','$end_date')";
+
+            $insert_into_custom_table = "INSERT INTO `ply_orders_cstm`(`id_c`, `ply_packaging_id_c`, `delivery_time_c`, `delivery_time_slot_for_lunch_c`, `delivery_timeslot_for_dinner_c`, `payment_mode_c`,`delivery_charge_c`, `order_amout_c`, `deposition_amount_c`, `discounted_price_c`, `service_charge_c`, `packaging_charges_c`, `delivery_on_sunday_c`, `delivery_on_saturday_c`, `ply_package_rate_finder_id_c`, `ply_package_rate_finder_id1_c`, `package_duration_in_days_c`, `order_meal_type_c`, `start_package_time_c`, `ply_delivery_boy_id_c`, `placeefy_instant_delivery_c`, `city_c`, `online_payment_received_amt_c`, `online_pay_received_status_c`, `ply_customer_addresses_id_c`) VALUES ('$order_id','$packaging_id','$delivery_time','$dinnerDeliveryTime','$lunchDeliveryTime','$payment_mode','$delivery_price','$final_price','$deposition_amount','$discounted_price','$service_charges','$packaging_charges','$Delivery_on_sunday','$Delivery_on_saturday','$get_package_rate_finder_id','$get_package_rate_finder_id','$packageDurationNumber','$mealType','$start_Package_Time','$delivery_boy_id','$placeefy_instant_check','$city','$online_pay_received_amt','$online_pay_received_status','$cust_address_id')";
+
+            //update addons in order
+            if($this->execute($insert_into_main_table) && $this->execute($insert_into_custom_table))
+            {
+	            $addons = $order_info['addon'];
+	            $add_count=0;$add_on_c=0;
+	            if(is_array($addons) && !empty($addons))
+	            {
+					foreach($addons as $addon)
+					{
+						$add_count++;
+					    $addon_id = $addon['id'];
+					    $addon_quantity = $addon['quantity'];
+					    if($add_on_c==0)
+					   	{
+					   		$column_name = 'ply_add_on_id_c';
+					   		$column_name_1 = 'addon_'.$add_count.'_qty_c';
+					        
+					   	}else{
+					   		   $column_name = 'ply_add_on_id'.$add_on_c.'_c';
+					   		   $column_name_1 = 'addon_'.$add_count.'_qty_c';
+					          
+					   	}
+					    
+					    $update_addons = "UPDATE `ply_orders_cstm` SET $column_name='$addon_id',$column_name_1='$addon_quantity' where `id_c`='$order_id'";
+					    $this->execute($update_addons);
+					   $add_on_c++; 
+					}
+				}
+				$update_addons_count = "UPDATE `ply_orders` SET `no_of_addons`='$add_count' WHERE `id`='$order_id'";
+				$this->execute($update_addons_count);
+				return trim($order_id);
+			}
+
+
                   
-       }
-    public function insert_order_details($cart_id,$order_id,$client_id,$merchant_id)
-    {
-       $run_query = "SELECT * FROM `mt_cart` WHERE id='$cart_id' and `quantity` > 0 and merchant_id='$merchant_id' and `client_id`='$client_id'";
-       $getcartcount = $this->db_num($run_query);
-       if($getcartcount == 1)
-       {
-        
-           $getcartdetails = "SELECT * FROM `mt_cart` WHERE id='$cart_id' and `quantity` > 0 and merchant_id='$merchant_id' and `client_id`='$client_id'";
-           $result = $this->mysqli->query($getcartdetails);
-           $row = $result->fetch_assoc();
- 
-           $getitemprice = "SELECT `price` FROM `mt_item` WHERE `id`='".$row['item_id']."'";
-           $result1 = $this->mysqli->query($getitemprice);
-           $row1 = $result1->fetch_assoc();
-           $arr = unserialize($row1['price']);
-           $price='';
-           if(is_array($arr)){
-             foreach($arr as $key=>$value)
-             {
-               $size_id = $key;
-               $query = "SELECT `size_name` FROM `mt_size` WHERE `id`='$size_id'";
-               $result = $this->mysqli->query($query); 
-               $record = mysqli_fetch_assoc($result);
-               $size_name = $record['size_name'];
-              
-               if($row['quantity_flag']=='H' && $size_name=='Half')
-                $price = $value;
-               if($row['quantity_flag']=='F' && $size_name=='Full')
-               $price = $value; 
-             }
-             
-           }
- 
-           $insert_order_details = $this->execute("INSERT INTO `mt_order_details`(`order_id`, `client_id`, `item_id`, `item_name`, `size`, `qty`,`normal_price`) VALUES ('$order_id','$client_id','".$row['item_id']."','".$row['item_name']."','".$row['quantity_flag']."','".$row['quantity']."','$price')");
-           if($insert_order_details)
-           {
-             return $row['item_price'];
-           }
-     }else{
-              echo json_encode(array('statuscode' => NO_CONTENT, 'responseMessage' => 'false','result'=>'For mentioned cart id and client id, merchant id is incorrect'));
-                            exit;
-     }
- 
-      
     }
+    public function get_delivery_boy($kitchen_id)
+    {
+       		$assigned_arr = array(); $assigned_values=array();
+ 			$get_delivery_boy_from_kith = "SELECT `ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb` as `delivery_boy_id`,`order_delivery_capacity_c`,`type_of_delivery_boy_c`	 FROM `ply_kitchen_ply_delivery_boy_1_c` A join `ply_delivery_boy` B on A.`ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb`= B.`id` join `ply_delivery_boy_cstm` C on B.`id`=C.`id_c` WHERE `ply_kitchen_ply_delivery_boy_1ply_kitchen_ida`=TRIM('$kitchen_id') and A.deleted=0 and B.deleted=0";
+ 			$mysql_query =  $this->mysqli->query($get_delivery_boy_from_kith);
+			while($row = mysqli_fetch_assoc($mysql_query))
+			{
+				$delivery_boy_type = $row['type_of_delivery_boy_c'];
+				if($delivery_boy_type=='main')
+				{
+					$capacity = $row['order_delivery_capacity_c'];
+					$delivery_boy_id = $row['delivery_boy_id'];
+					//total order assigned till date
+					$get_assigned_count = "SELECT count(B.`ply_delivery_boy_id_c`) as total_assigned_count FROM `ply_orders` A join `ply_orders_cstm` B on A.id=B.id_c WHERE A.ply_kitchen_id_c='$kitchen_id'and `ply_delivery_boy_id_c`='$delivery_boy_id' and A.deleted=0";
+					$mysql_query_1 =  $this->mysqli->query($get_assigned_count);
+					$row1 = mysqli_fetch_assoc($mysql_query_1);
+					$assigned_count = $row1['total_assigned_count'];
+					if($assigned_count<=Delivery_Boy_Check_Count && $assigned_count<=$capacity)
+					{
+						$assigned_keys[] = $row['delivery_boy_id'];
+						$assigned_values[] =  $assigned_count;
+					}
+
+
+
+				}
+
+			} // end of while
+			if(!empty($assigned_keys))
+			{
+				if(sizeof($assigned_keys)>=2)
+				{
+					if(!empty($assigned_keys) && !empty($assigned_values))
+					{
+						// combine key and value array
+						$final_arr = array_combine($assigned_keys, $assigned_values);
+						//****************LOG Creation*********************
+        					$APILogFile = LOG_PATH.'placedOrder.txt';
+        					$handle = fopen($APILogFile, 'a');
+        					$timestamp = date('Y-m-d H:i:s');
+        					$logArray1 = print_r($final_arr, true);
+        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+        					fwrite($handle, $logMessage);				
+        					fclose($handle);
+        				   //****************ENd OF Code*****************
+													
+						//get all values of array
+						$arrval = array_values($final_arr);
+													
+						// check all values of array are same or not (if all are same then return 1 else blank
+						$allValuesAreTheSame = (count(array_unique($arrval)) === 1);
+						if($allValuesAreTheSame==1)
+						{
+							//if count of all delivery boy are same then take any one randomly
+							$final_assigned_deliveryboy_id = array_rand($final_arr);
+							//****************LOG Creation*********************
+	        					$APILogFile = LOG_PATH.'placedOrder.txt';
+	        					$handle = fopen($APILogFile, 'a');
+	        					$timestamp = date('Y-m-d H:i:s');
+	        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+	        					$logArray1 = print_r($final_arr, true);
+	        					$logMessage1 = "\nif count of all delivery boy are same then take any one randomly(load <=15)";
+	        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+	        					fwrite($handle, $logMessage1);	
+	        					fwrite($handle, $logMessage);				
+	        					fclose($handle);
+	        		  		 //****************ENd OF Code*****************
+						}else{
+													
+								//find minimum assigned delivery boy count
+								$final_assigned_deliveryboy_id = array_keys($final_arr, min($final_arr)); 
+								//****************LOG Creation*********************
+	        					$APILogFile = LOG_PATH.'placedOrder.txt';
+	        					$handle = fopen($APILogFile, 'a');
+	        					$timestamp = date('Y-m-d H:i:s');
+	        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+	        					$logArray1 = print_r($final_arr, true);
+	        					$logMessage1 = "\nfind minimum assigned delivery boy count.(load <=15)";
+	        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+	        					fwrite($handle, $logMessage1);	
+	        					fwrite($handle, $logMessage);				
+	        					fclose($handle);
+	        		  		 //****************ENd OF Code*****************
+															
+							}
+					}
+				}else{
+
+					$final_assigned_deliveryboy_id = $assigned_keys[0];
+					//****************LOG Creation*********************
+        					$APILogFile = LOG_PATH.'placedOrder.txt';
+        					$handle = fopen($APILogFile, 'a');
+        					$timestamp = date('Y-m-d H:i:s');
+        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+        					$logArray1 = print_r($final_arr, true);
+        					$logMessage1 = "\nThis kitchen have only one Main delivery boy.(load<=15)";
+        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+        					fwrite($handle, $logMessage1);	
+        					fwrite($handle, $logMessage);				
+        					fclose($handle);
+        		   //****************ENd OF Code*****************
+				}
+			}else{
+
+					//****************LOG Creation*********************
+				       $APILogFile = LOG_PATH.'placedOrder.txt';
+				        $handle = fopen($APILogFile, 'a');
+				        $timestamp = date('Y-m-d H:i:s');
+				        $logMessage1 = "\nNo Main delivery boys avaialble in DB";
+				        fwrite($handle, $logMessage1);
+				        fclose($handle);
+			     //****************ENd OF Code*****************
+				//if array is empty means condition fails and now order need to assign to alternate delivery boy
+				$get_alternate_delivery_boy_id = "SELECT `ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb` as `delivery_boy_id`,`order_delivery_capacity_c` FROM `ply_kitchen_ply_delivery_boy_1_c` A join `ply_delivery_boy` B on A.`ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb`= B.`id` join `ply_delivery_boy_cstm` C on B.`id`=C.`id_c` WHERE `ply_kitchen_ply_delivery_boy_1ply_kitchen_ida`=TRIM('$kitchen_id') and A.deleted=0 and B.deleted=0 and `type_of_delivery_boy_c`='alternate' limit 1";
+ 				$mysql_query_2 =  $this->mysqli->query($get_alternate_delivery_boy_id);
+ 				$row3 = mysqli_fetch_assoc($mysql_query_2);
+				$capacity_alternate_boy = $row3['order_delivery_capacity_c'];
+				$alternate_delivery_boy_id = $row3['delivery_boy_id'];
+				$alt_get_assigned_count = "SELECT count(B.`ply_delivery_boy_id_c`) as total_assigned_count FROM `ply_orders` A join `ply_orders_cstm` B on A.id=B.id_c WHERE A.ply_kitchen_id_c='$kitchen_id'and `ply_delivery_boy_id_c`='$alternate_delivery_boy_id' and A.deleted=0";
+					$mysql_query_4 =  $this->mysqli->query($alt_get_assigned_count);
+					$row4 = mysqli_fetch_assoc($mysql_query_4);
+					$alt_DB_assigned_count = $row4['total_assigned_count'];
+					if($alt_DB_assigned_count<=Delivery_Boy_Check_Count && $alt_DB_assigned_count<=$capacity_alternate_boy)
+					{
+						$final_assigned_deliveryboy_id = $row3['delivery_boy_id'];
+						//****************LOG Creation*********************
+        					$APILogFile = LOG_PATH.'placedOrder.txt';
+        					$handle = fopen($APILogFile, 'a');
+        					$timestamp = date('Y-m-d H:i:s');
+        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id,"alt_DB_assigned_count"=>$alt_DB_assigned_count,"capacity_alternate_boy"=>$capacity_alternate_boy);
+        					$logArray1 = print_r($final_arr, true);
+        					$logMessage1 = "\nThis kitchen don't have Main delivery boy.(load<=15)";
+        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+        					fwrite($handle, $logMessage1);
+        					fwrite($handle, $logMessage);				
+        					fclose($handle);
+        		   //****************ENd OF Code*****************
+					}
+					else{
+							//****************LOG Creation*********************
+					       $APILogFile = LOG_PATH.'placedOrder.txt';
+					        $handle = fopen($APILogFile, 'a');
+					        $timestamp = date('Y-m-d H:i:s');
+					        $logMessage1 = "\nNo Alternate delivery boys avaialble in DB";
+					        fwrite($handle, $logMessage1);
+					        fwrite($handle, $logMessage);				
+					        fclose($handle);
+				     	//****************ENd OF Code*****************
+
+							$assigned_arr = array(); $assigned_values=array();
+				 			$get_delivery_boy_from_kith = "SELECT `ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb` as `delivery_boy_id`,`order_delivery_capacity_c`,`type_of_delivery_boy_c`	 FROM `ply_kitchen_ply_delivery_boy_1_c` A join `ply_delivery_boy` B on A.`ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb`= B.`id` join `ply_delivery_boy_cstm` C on B.`id`=C.`id_c` WHERE `ply_kitchen_ply_delivery_boy_1ply_kitchen_ida`=TRIM('$kitchen_id') and A.deleted=0 and B.deleted=0";
+				 			$mysql_query =  $this->mysqli->query($get_delivery_boy_from_kith);
+							while($row = mysqli_fetch_assoc($mysql_query))
+							{
+								$delivery_boy_type = $row['type_of_delivery_boy_c'];
+								if($delivery_boy_type=='main')
+								{
+									$capacity = $row['order_delivery_capacity_c'];
+									$delivery_boy_id = $row['delivery_boy_id'];
+									//total order assigned till date
+									$get_assigned_count = "SELECT count(B.`ply_delivery_boy_id_c`) as total_assigned_count FROM `ply_orders` A join `ply_orders_cstm` B on A.id=B.id_c WHERE A.ply_kitchen_id_c='$kitchen_id'and `ply_delivery_boy_id_c`='$delivery_boy_id' and A.deleted=0";
+									$mysql_query_1 =  $this->mysqli->query($get_assigned_count);
+									$row1 = mysqli_fetch_assoc($mysql_query_1);
+									$assigned_count = $row1['total_assigned_count'];
+									if($assigned_count>=Delivery_Boy_Check_Count && $assigned_count<=$capacity)
+									{
+										$assigned_keys[] = $row['delivery_boy_id'];
+										$assigned_values[] =  $assigned_count;
+									}
+
+
+
+								}
+
+							} // end of while
+							if(!empty($assigned_keys))
+							{
+								if(sizeof($assigned_keys)>=2)
+								{
+									if(!empty($assigned_keys) && !empty($assigned_values))
+									{
+										// combine key and value array
+										$final_arr = array_combine($assigned_keys, $assigned_values);
+																	
+										//get all values of array
+										$arrval = array_values($final_arr);
+																	
+										// check all values of array are same or not (if all are same then return 1 else blank
+										$allValuesAreTheSame = (count(array_unique($arrval)) === 1);
+										if($allValuesAreTheSame==1)
+										{
+											//if count of all delivery boy are same then take any one randomly(load >=15)
+											$final_assigned_deliveryboy_id = array_rand($final_arr);
+											//****************LOG Creation*********************
+				        					$APILogFile = LOG_PATH.'placedOrder.txt';
+				        					$handle = fopen($APILogFile, 'a');
+				        					$timestamp = date('Y-m-d H:i:s');
+				        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+				        					$logArray1 = print_r($final_arr, true);
+				        					$logMessage1 = "\nif count of all delivery boy are same then take any one randomly(load >=15)";
+				        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        					fwrite($handle, $logMessage1);	
+				        					fwrite($handle, $logMessage);				
+				        					fclose($handle);
+				        		  		 //****************ENd OF Code*****************
+										}else{
+																	
+												//find minimum assigned Delivery boy(load>=15) count
+												$final_assigned_deliveryboy_id = array_keys($final_arr, min($final_arr)); 
+												//****************LOG Creation*********************
+				        					$APILogFile = LOG_PATH.'placedOrder.txt';
+				        					$handle = fopen($APILogFile, 'a');
+				        					$timestamp = date('Y-m-d H:i:s');
+				        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+				        					$logArray1 = print_r($final_arr, true);
+				        					$logMessage1 = "\nfind minimum assigned Delivery boy(load>=15) count";
+				        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        					fwrite($handle, $logMessage1);	
+				        					fwrite($handle, $logMessage);				
+				        					fclose($handle);
+				        		  		 //****************ENd OF Code*****************
+																			
+											}
+									}
+								}else{
+
+									$final_assigned_deliveryboy_id = $assigned_keys[0];
+									$final_assigned_deliveryboy_id = $assigned_keys[0];
+									//****************LOG Creation*********************
+				        					$APILogFile = LOG_PATH.'placedOrder.txt';
+				        					$handle = fopen($APILogFile, 'a');
+				        					$timestamp = date('Y-m-d H:i:s');
+				        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+				        					$logArray1 = print_r($final_arr, true);
+				        					$logMessage1 = "\nThis kitchen have only one Main delivery boy.(load>=15)";
+				        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        					fwrite($handle, $logMessage1);	
+				        					fwrite($handle, $logMessage);				
+				        					fclose($handle);
+				        		   //****************ENd OF Code*****************
+								}
+							}else{
+									//if array is empty means condition fails and now order need to assign to alternate delivery boy
+									$get_alternate_delivery_boy_id = "SELECT `ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb` as `delivery_boy_id`,`order_delivery_capacity_c` FROM `ply_kitchen_ply_delivery_boy_1_c` A join `ply_delivery_boy` B on A.`ply_kitchen_ply_delivery_boy_1ply_delivery_boy_idb`= B.`id` join `ply_delivery_boy_cstm` C on B.`id`=C.`id_c` WHERE `ply_kitchen_ply_delivery_boy_1ply_kitchen_ida`=TRIM('$kitchen_id') and A.deleted=0 and B.deleted=0 and `type_of_delivery_boy_c`='alternate' limit 1";
+					 				$mysql_query_2 =  $this->mysqli->query($get_alternate_delivery_boy_id);
+					 				$row3 = mysqli_fetch_assoc($mysql_query_2);
+									$capacity_alternate_boy = $row3['order_delivery_capacity_c'];
+									$alternate_delivery_boy_id = $row3['delivery_boy_id'];
+									$alt_get_assigned_count = "SELECT count(B.`ply_delivery_boy_id_c`) as total_assigned_count FROM `ply_orders` A join `ply_orders_cstm` B on A.id=B.id_c WHERE A.ply_kitchen_id_c='$kitchen_id'and `ply_delivery_boy_id_c`='$alternate_delivery_boy_id' and A.deleted=0";
+										$mysql_query_4 =  $this->mysqli->query($alt_get_assigned_count);
+										$row4 = mysqli_fetch_assoc($mysql_query_4);
+										$alt_DB_assigned_count = $row4['total_assigned_count'];
+										if($alt_DB_assigned_count>=Delivery_Boy_Check_Count && $alt_DB_assigned_count<=$capacity_alternate_boy)
+										{
+											$final_assigned_deliveryboy_id = $row3['delivery_boy_id'];
+											//****************LOG Creation*********************
+				        					$APILogFile = LOG_PATH.'placedOrder.txt';
+				        					$handle = fopen($APILogFile, 'a');
+				        					$timestamp = date('Y-m-d H:i:s');
+				        					$final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id,"alt_DB_assigned_count"=>$alt_DB_assigned_count,"capacity_alternate_boy"=>$capacity_alternate_boy);
+				        					$logArray1 = print_r($final_arr, true);
+				        					$logMessage1 = "\nThis kitchen don't have Main delivery boy.(load>=15)";
+				        					$logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        					fwrite($handle, $logMessage1);
+				        					fwrite($handle, $logMessage);				
+				        					fclose($handle);
+				        		  			 //****************ENd OF Code*****************
+										}
+								}
+
+					}
+				}
+			if($final_assigned_deliveryboy_id!='' and !empty($final_assigned_deliveryboy_id))
+			{
+				//****************LOG Creation*********************
+				       $APILogFile = LOG_PATH.'placedOrder.txt';
+				        $handle = fopen($APILogFile, 'a');
+				        $timestamp = date('Y-m-d H:i:s');
+				        $final_arr =  array("final_assigned_deliveryboy_id"=>$final_assigned_deliveryboy_id);
+				        $logArray1 = print_r($final_arr, true);
+				        $logMessage1 = "\nalgorithm executed successfully";
+				        $logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        fwrite($handle, $logMessage1);
+				        fwrite($handle, $logMessage);				
+				        fclose($handle);
+			 //****************ENd OF Code*****************
+				return $final_assigned_deliveryboy_id;
+			}else{
+
+				//defined in constant.php
+				//****************LOG Creation*********************
+				       $APILogFile = LOG_PATH.'placedOrder.txt';
+				        $handle = fopen($APILogFile, 'a');
+				        $timestamp = date('Y-m-d H:i:s');
+				        $final_arr =  array("default_delivery_boy_id"=>"cae497f8-6c52-f3df-85d8-5e788d272a47");
+				        $logArray1 = print_r($final_arr, true);
+				        $logMessage1 = "\nif all get blank it assigned default delivery boy";
+				        $logMessage = "\nplacedOrder Result at $timestamp :-\n$logArray1";
+				        fwrite($handle, $logMessage1);
+				        fwrite($handle, $logMessage);				
+				        fclose($handle);
+			 //****************ENd OF Code*****************
+				return default_delivery_boy_id;
+			}
+
+	}
+	public function get_name($id,$table_name)
+	{
+		$get_name = "SELECT `name` FROM $table_name WHERE deleted=0 and `id`='$id'";
+		$mysql_query_2 =  $this->mysqli->query($get_name);
+		$row3 = mysqli_fetch_assoc($mysql_query_2);
+		return ($row3['name']!='')?$row3['name']:'Name Not Available';
+		
+	}
+	public function get_package_rate_finder_id($delivery_time,$packageDurationNumber,$pure_veg)
+	{
+			if($pure_veg_flag=='veg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=1';
+	    	}else if($pure_veg_flag=='nonveg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=0';
+	    	}
+	    	else if($pure_veg_flag=='veg_nonveg')
+	    	{
+	    		$pure_veg = ' and `pure_veg_c`=1';
+	    	}
+	    	else if($pure_veg_flag=='egg')
+	    	{
+ 				$pure_veg = " and `pure_veg_c`=0";
+	    	}else{
+	    		$pure_veg = " and `pure_veg_c`=''";
+	    	}
+
+		$get_package_finder = "SELECT `id` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE `no_of_days_deliveries`='' and `delivery_time`='' $pure_veg and deleted=0";
+		$mysql_query_2 =  $this->mysqli->query($get_package_finder);
+		$row3 = mysqli_fetch_assoc($mysql_query_2);
+		return ($row3['id']!='')?$row3['id']:'';
+	}
     public function get_cart_items_based_on_clientId($query,$clientid,$lat1,$long1)
    {
              $final_del_price =''; $a=array();
@@ -1751,214 +1946,6 @@ class DB
 			return $final_data;
 		 
 	 }
-	 public function get_order_reports($merchant_id,$from_date,$to_date)
-	 {
-			$query = "SELECT * FROM `mt_order` as A inner join mt_order_delivery_address as C on A.`order_id` = C.`order_id` WHERE `merchant_id`='$merchant_id' and LOWER(`status`) ='delivered' and DATE(DATE_FORMAT(A.date_created, '%Y-%m-%d')) >= '$from_date' and  DATE(DATE_FORMAT(A.date_created, '%Y-%m-%d')) <= '$to_date' group by A.`order_id`";
-			$sql = $this->mysqli->query($query); 
-        	$result = array();$data=array();$final_data=array();
-        	while ($result = mysqli_fetch_assoc($sql)) 
-       		{
-				
-				$j=0;
-				$order_id = $result['order_id'];
-				$client_id = $result['client_id'];
-				$get_client_details ="SELECT CONCAT_WS(' ', `first_name`, `last_name`) AS fullname,`contact_phone`  FROM `mt_client` WHERE client_id='$client_id'";
-				$sql4 = $this->mysqli->query($get_client_details);
-				$clientdata = mysqli_fetch_assoc($sql4);
-				$result['client_name'] = $clientdata['fullname'];
-				$result['client_phone'] = $clientdata['contact_phone'];
-				$get_order_details = "SELECT `id`, `order_id`, `client_id`, `item_id`, `item_name`, `order_notes`, `normal_price`, `discounted_price`, `size`, `qty`, `cooking_ref`, `addon`, `ingredients`, `non_taxable` FROM `mt_order_details` WHERE `order_id`='$order_id'";
-				$sql2 = $this->mysqli->query($get_order_details);
-				foreach($sql2 as $items)
-				{
-						if($items['size']=='H' || $items['size']=='Half')
-						{
-							$itemsize = 'Half';
-						}elseif($items['size']=='F' || $items['size']=='Full')
-						{
-							$itemsize = 'Full';
-						}else{
-							$itemsize = 'Single';
-							
-						}
-						$result['item'][$j]['client_id']   =  $items['client_id'];
-		                $result['item'][$j]['item_id'] = $items['item_id'];
-						$result['item'][$j]['item_name'] = $items['item_name'];
-						$result['item'][$j]['order_notes'] = $items['order_notes'];
-						$result['item'][$j]['normal_price'] = $items['normal_price'];
-						$result['item'][$j]['discounted_price'] = $items['discounted_price'];
-						$result['item'][$j]['size'] = $itemsize;
-						$result['item'][$j]['qty'] = $items['qty'];
-						$result['item'][$j]['cooking_ref'] = $items['cooking_ref'];
-						$result['item'][$j]['addon'] = $items['addon'];
-						$result['item'][$j]['ingredients'] = $items['ingredients'];
-						$result['item'][$j]['non_taxable'] = $items['non_taxable'];
-		                $j++;
-				}
-
-				$get_driver_details = "SELECT `driver_id` FROM `mt_driver_order_status` WHERE `order_id`='$order_id'";
-				$sql3 = $this->mysqli->query($get_driver_details);
-				$data = mysqli_fetch_assoc($sql3);
-				$result['driver_id'] = $data['driver_id'];
-				$result['driver_name'] = $this->get_delivery_boy_meta_keyvalue($data['driver_id'],'boy_name');
-				$result['driver_mobile_number'] = $this->get_delivery_boy_meta_keyvalue($data['driver_id'],'boy_mobile_number');
-				unset($result['json_details']);
-				array_push($final_data,$result);
-
-				
-			}
-			return $final_data;
-		 
-	 }
-	 public function get_featured_restro($query,$lat1,$long1)
-	 {
-		    $query=$this->mysqli->query($query); 
-        	$result = array();$j=0;$data=array();
-        	while ($record = mysqli_fetch_assoc($query)) 
-       		{
-		            $latitude2 = $record['latitude'];
-		            $logitude2 = $record['lontitude'];
-		            $distance = get_distance_between_points($lat1, $long1, $latitude2, $logitude2);
-		            $kilometers = (float)($distance['kilometers']!='')?number_format($distance['kilometers'], 2, '.', ''):'0';
-		            $merchant_area_covered = (float)($this->get_meta_value_from_metakey($record['id'],'area_covered_in_km')!='')?trim($this->get_meta_value_from_metakey($record['id'],'area_covered_in_km')):'0';
-					 
-				if($kilometers>0 && $merchant_area_covered>0)
-				{
-		            if($kilometers <= $merchant_area_covered)
-					{
-						
-								  $result['merchant_id'] = $record['id']; 
-								  
-								  //fetch merchant open or close time					  
-									  $dayname = strtolower(date('l'));					  
-									  $get_merc_openclosestatus = "SELECT * FROM `mt_merchant_open_close` WHERE `merchant_id`='".$record['id']."' and LOWER(`day`) = LOWER('$dayname') and LOWER(`status`) = 'active'"; 
-									  $mysql_query =  $this->mysqli->query($get_merc_openclosestatus);			
-									  $row11 = $mysql_query->fetch_assoc();				
-									  $restro_starttime = (isset($row11['start_time'])?$row11['start_time']:'NA');			
-									  $restro_endtime = (isset($row11['end_time'])?$row11['end_time']:'NA');				
-									  $restro_open_close_status = (isset($row11['is_open_close'])?$row11['is_open_close']:'close');
-									//end 
-									
-								  $offer_available = "SELECT `offer_percentage`,`offer_price`,`offer_image`,`valid_to`,`valid_from` FROM `mt_offers` as A inner join mt_merchant_offers as B on A.id = B.offer_id where B.merchant_id = '".$record['id']."' and LOWER(A.`status`) = LOWER('Active')";
-								  
-								  $getofferdetails = $this->mysqli->query($offer_available);
-								  $offer_values = mysqli_fetch_assoc($getofferdetails);
-								  $valid_to = $offer_values['valid_to'];
-								  $valid_from =  $offer_values['valid_from'];
-								  $today = date('Y-m-d');
-								  if($valid_from <= $today && $valid_to >= $today)
-								   {
-										$result['offer_percentage'] = number_format($offer_values['offer_percentage'], 2, '.', '');
-										$result['offer_price'] = number_format($offer_values['offer_price'], 2, '.', '');
-										$result['offer_image'] = $offer_values['offer_image'];
-										$result['offer_valid_upto'] = $valid_to;
-								 }else
-								 {
-									 $result['offer_percentage'] = number_format(0.00, 2, '.', '');
-								 }
-								$rating = "SELECT `rating` FROM `mt_review` WHERE `merchant_id`='".$record['id']."'";
-								  // $rating = "SELECT * FROM `mt_rating` WHERE `merchant_id` = '".$record['id']."'";
-								  $getmerchantratings = $this->mysqli->query($rating);
-								  $numberOfReviews = 0; $totalStars = 0; $average=0;
-								  while ($values1 = mysqli_fetch_assoc($getmerchantratings)) 
-								  {
-									$totalStars += $values1['rating'];
-									$numberOfReviews++;
-								  }
-								  if($numberOfReviews!=0.0)
-									$average = number_format((float) $totalStars/$numberOfReviews, 1, '.', ''); 
-								  else
-									$average = number_format((float) 0, 1, '.', ''); 
-								  
-								  $result['cuisine'] = array();  
-								  $j=0;
-								  $query1 = "SELECT cuisine_id,cuisine_name FROM `mt_merchant_cuisine` as A inner join mt_cuisine as B on A.cuisine_id = B.id where A.merchant_id = '".$record['id']."'";
-								  $getcuisine = $this->mysqli->query($query1); 
-								  
-								  foreach($getcuisine as $record1) {
-									
-									$result['cuisine'][$j]['cuisine_id']   =  $record1['cuisine_id'];
-									$result['cuisine'][$j]['cuisine_name'] = $record1['cuisine_name'];
-									$j++;
-								  }
-								  if(empty($result['cuisine'])){$result['cuisine'] = '{}';}
-								  
-								  $result['restaurant_slug'] = $record['restaurant_slug'];  
-								  $result['restaurant_name'] = $record['restaurant_name'];  
-								  $result['rating'] = $average;  
-								  $result['rating_given_count'] = ($average!=0)?'Based on '.$numberOfReviews.' Voters':'No Reviews given by any Voters';
-								  $result['owner_name'] = $record['owner_name'];  
-								  $result['restaurant_phone'] = $record['restaurant_phone'];  
-								  $result['contact_name'] = $record['contact_name'];  
-								  $result['contact_phone'] = $record['contact_phone'];  
-								  $result['contact_email'] = $record['contact_email'];  
-								  $result['country_code'] = $record['country_code'];  
-								  $result['address'] = $record['address'];  
-								  $result['street'] = $record['street'];  
-								  $result['city'] = $record['city'];  
-								  $result['state'] = $record['state'];  
-								  $result['post_code'] = $record['post_code'];  
-								  $result['service'] = $record['service'];  
-								  $result['free_delivery'] = $record['free_delivery'];  
-								  $result['delivery_estimation'] = $record['delivery_estimation'];  
-								  $result['username'] = $record['username'];  
-								  $result['password'] = $record['password'];
-								  $result['activation_key'] = $record['activation_key'];  
-								  $result['activation_token'] = $record['activation_token'];  
-								  $result['status'] = $record['status'];  
-								  $result['date_created'] = $record['date_created'];  
-								  $result['date_modified'] = $record['date_modified'];  
-								  $result['date_activated'] = $record['date_activated'];  
-								  $result['last_login'] = $record['last_login'];  
-								  $result['ip_address'] = $record['ip_address'];  
-								  $result['package_id'] = $record['package_id'];  
-								  $result['package_price'] = $record['package_price'];  
-								  $result['membership_expired'] = $record['membership_expired']; 
-								  $result['is_featured'] = $record['is_featured']; 
-								  $result['is_ready'] = $record['is_ready']; 
-								  $result['is_sponsored'] = $record['is_sponsored']; 
-								  $result['sponsored_expiration'] = $record['sponsored_expiration']; 
-								  $result['membership_purchase_date'] = $record['membership_purchase_date']; 
-								  $result['sort_featured'] = $record['sort_featured']; 
-								  $result['is_commission'] = $record['is_commission']; 
-								  $result['percent_commision'] = $record['percent_commision']; 
-								  $result['session_token'] = $record['session_token']; 
-								  $result['commision_type'] = $record['commision_type']; 
-								  $result['mobile_session_token'] = $record['mobile_session_token']; 
-								  $result['merchant_key'] = $record['merchant_key']; 
-								  $result['latitude'] = $record['latitude']; 
-								  $result['lontitude'] = $record['lontitude']; 
-								  $result['delivery_charges'] = $record['delivery_charges']; 
-								  $result['minimum_order'] = $record['minimum_order']; 
-								  $result['delivery_minimum_order'] = $record['delivery_minimum_order']; 
-								  $result['delivery_maximum_order'] = $record['delivery_maximum_order']; 
-								  $result['pickup_minimum_order'] = $record['pickup_minimum_order']; 
-								  $result['country_name'] = $record['country_name']; 
-								  $result['country_id'] = $record['country_id']; 
-								  $result['state_id'] = $record['state_id']; 
-								  $result['city_id'] = $record['city_id']; 
-								  $result['area_id'] = $record['area_id']; 
-								  $result['logo'] = $record['logo'];
-								  $result['merchant_type'] = $record['merchant_type']; 
-								  $result['invoice_terms'] = $record['invoice_terms'];
-								  $result['distance'] = $kilometers."Km";
-								  $result['approx_served_for_2'] = (!empty($this->get_merchant_meta_keyvalue($record['id'],'merchant_served_for_two_people')))?$this->get_merchant_meta_keyvalue($record['id'],'merchant_served_for_two_people'):'';
-								  $result['merchant_login_status'] = (!empty($this->get_merchant_meta_keyvalue($record['id'],'merchant_login_status')))?strtolower($this->get_merchant_meta_keyvalue($record['id'],'merchant_login_status')):'off';
-								  
-								  $result['order_limit'] = (!empty($this->get_merchant_meta_keyvalue($record['id'],'order_limit')))?strtolower($this->get_merchant_meta_keyvalue($record['id'],'order_limit')):'off';
-								  
-								  $result['area_name'] = (!empty($this->get_merchant_meta_keyvalue($record['id'],'area_name')))?ucfirst($this->get_merchant_meta_keyvalue($record['id'],'area_name')):'';
-						
-								  $result['restro_start_time'] =  $restro_starttime;					  
-								  $result['restro_end_time'] =  $restro_endtime;					
-								  $result['restro_is_open_close'] =  $restro_open_close_status;
-								  array_push($data,$result);
-						}
-					
-				}
-			 }
-			 return $data;
-	 }
 	 
 	 public function fetchFirebaseTokenUsers($user_type,$sender_id,$message, $API_SERVER_KEY) 
 	 {       
@@ -2080,149 +2067,486 @@ class DB
 		
 		return $result;
        // ob_flush();
-     }
-	 public function get_categorywiseitemsfortesting($query,$category_type="all",$merchant_id)
-    {
-		$resArr = array(); //create the result array
-        $j=0; $result = array();$data=array();$k=0; $arr=array();$result11=array();
+     } 
+     public function get_specific_package_details($package_id)
+	 {
+		  $resArr1 = array();
+		  $get_package_details = "SELECT `id`,`name`,`description`,`package_type`,`currency_id`,`package_duration`,`package_time`,`package_status`,`best_value_c`,`veg_meal_message_c`,`egg_meal_message_c`,`nonveg_meal_message_c` FROM `ply_package` A join `ply_package_cstm` B on A.`id`=B.`id_c` WHERE A.`deleted`=0 and `id`=TRIM('$package_id')";
+	       $mysql_query =  $this->mysqli->query($get_package_details);
+	       while($row17 = mysqli_fetch_assoc($mysql_query))
+	        { 	
+	        			if($row17['package_type']!='trial')
+	        			{
+
+	        			
+		                	$resArr1['package_type'] = $row17['package_type'];
+		                	$resArr1['package_id'] = $row17['id'];
+		                	$resArr1['name'] = $row17['name'];
+		                	$resArr1['description'] = w1250_to_utf8($row17['description']);
+		                	$resArr1['package_duration'] = str_replace('^','', $row17['package_duration']);
+		                	$resArr1['package_time'] = str_replace('_',' ',ucfirst($row17['package_time']));
+		                	switch ($row17['package_time']) {
+		                		case 'lunch':
+		                			$resArr1['lunch'] = true;
+		                			$resArr1['dinner'] = false;
+		                			break;
+
+		                		case 'dinner':
+		                			$resArr1['lunch'] = false;
+		                			$resArr1['dinner'] = true;
+		                			break;
+
+		                		case 'lunch_and_dinner':
+		                			$resArr1['lunch'] = true;
+		                			$resArr1['dinner'] = true;
+		                			$resArr1['lunch_and_dinner'] = true;
+		                			break;
+		                		
+		                		default:
+		                			$resArr1['lunch'] = false;
+		                			$resArr1['dinner'] = false;
+		                			$resArr1['lunch_and_dinner'] = false;
+		                			break;
+		                	}
+		                	$resArr1['package_status'] = $row17['package_status'];
+		                	$resArr1['best_value'] = (($row17['best_value_c']==0)?false:true);
+		                	
+	                	}else{
+
+	                		$resArr1['package_type'] = $row17['package_type'];
+		                	$resArr1['package_id'] = $row17['id'];
+		                	$resArr1['name'] = $row17['name'];
+		                	$resArr1['description'] = w1250_to_utf8($row17['description']);
+		                	$resArr1['package_status'] = $row17['package_status'];
+		                	$resArr1['lunch'] = true;
+		                	$resArr1['dinner'] = true;
+		                	$resArr1['best_value'] = (($row17['best_value_c']==0)?false:true);
+	                	}
+	                	$resArr1['veg_meal_message'] = w1250_to_utf8($row17['veg_meal_message_c']);
+	                	$resArr1['egg_meal_message'] = w1250_to_utf8($row17['egg_meal_message_c']);
+	                	$resArr1['nonveg_meal_message'] = w1250_to_utf8($row17['nonveg_meal_message_c']);
+	                	// get kitchen from package code start here
+	                	$get_kitchen_id = "SELECT `ply_kitchen_ply_package_1ply_kitchen_ida` as kitchen_id FROM `ply_kitchen_ply_package_1_c` WHERE `ply_kitchen_ply_package_1ply_package_idb`='".$row17['id']."' and `deleted`=0";
+	                	$mysql_query_1 =  $this->mysqli->query($get_kitchen_id);
+	                	$row18 = mysqli_fetch_assoc($mysql_query_1);
+	                	$kitchen_id = trim($row18['kitchen_id']);
+
+	                	if(empty($kitchen_id))
+	                	{
+	                		echo json_encode(['statuscode' => NO_CONTENT, 'responseMessage' => false, 'result'=>'this package does not belongs to any kitchen']);
+	                		exit;
+	                	}
+	                	$get_min_max_kitchen_price = "SELECT `kitchen_type`,
+	                	`kitchen_unavail_on_sunday` FROM 
+	                	`ply_kitchen` A join `ply_kitchen_cstm` B on A.`id`=B.`id_c`  WHERE 
+	                	`id`='$kitchen_id' and A.`deleted`=0";
+	                	$mysql_query_2 =  $this->mysqli->query($get_min_max_kitchen_price);
+	                	$row19 = mysqli_fetch_assoc($mysql_query_2);
+
+	                	$get_package_min_max_price = "SELECT package_min_price_c,package_max_price_c FROM `ply_package` A join ply_package_cstm B on A.id=B.id_c WHERE id='$package_id' and deleted=0";
+	                	$mysql_query_2_1 =  $this->mysqli->query($get_package_min_max_price);
+	                	$package_row = mysqli_fetch_assoc($mysql_query_2_1);
+	                	$package_meal_min_price = $package_row['package_min_price_c'];
+	                	$package_meal_max_price = $package_row['package_max_price_c'];
+	                	switch($row19['kitchen_type']){
+	                       	 case 'veg':
+	                       	 	$resArr1['veg'] = 'true';
+	                       	 	$resArr1['nonveg'] = 'false';
+	                    		$resArr1['egg'] = 'false';
+	                       	 	break;
+
+	                       	 case 'nonveg':
+	                       	 	$resArr1['veg'] = 'false';
+	                       	 	$resArr1['nonveg'] = 'true';
+	                       	 	$resArr1['egg'] = 'true';
+	                       	 	break;
+
+	                       	 case 'egg': 
+	                       	 	$resArr1['veg'] = 'false';
+	                       		$resArr1['nonveg'] = 'true';
+	                       		$resArr1['egg'] = 'true';
+	                       	 	break;
+
+	                       	 case 'veg_nonveg':
+	                       	 		$resArr1['veg'] = 'true';
+	                       	 		$resArr1['nonveg'] = 'true';
+	                       	 		$resArr1['egg'] = 'true';
+	                       	 		break;
+
+	                       	 default:
+	                       	  	$resArr1['veg'] = 'false';
+	                       	  	$resArr1['nonveg'] = 'false';
+	                       	  	$resArr1['egg'] = 'false';
+	                       	  	break;
+	                    }
+	                    
+	                    switch($row19['kitchen_unavail_on_sunday']){
+	                    	case 'lunch': 
+	                       	 		$resArr1['sunday_off_for_lunch'] = 'true';
+	                       	 		$resArr1['sunday_off_for_dinner'] = 'false';
+	                       	 		break;
+
+	                       	case 'dinner':
+	                       	 		$resArr1['sunday_off_for_lunch'] = 'true';
+	                       	 		$resArr1['sunday_off_for_dinner'] = 'false';
+	                       	 		break;
+
+	                       	case 'both': 
+	                       	 		$resArr1['sunday_off_for_lunch'] = 'true';
+	                       	 		$resArr1['sunday_off_for_dinner'] = 'true';
+	                       	 		break;
+	                       	
+	                       	default:
+	                       	  		$resArr1['sunday_off_for_lunch'] = 'false';
+	                       	 		$resArr1['sunday_off_for_dinner'] = 'false';
+	                       	  		break;
+	                    }
+	                	$values_arr =  array($package_meal_min_price,$package_meal_max_price);
+		    			$average = array_sum($values_arr)/count(array_filter($values_arr));
+		    			if(is_nan($average) || is_infinite($average))
+		    			{
+		    				$average = 0.00;
+		    			}
+	                	//end of code here
+	                	// select duration code
+		    			if($row17['package_type']!='trial')
+	        			{
+		                	$duration = str_replace('^','', $row17['package_duration']);
+		                	$str_arr = explode(",", $duration);  
+		                	$final_arr = array_reverse($str_arr, FALSE);
+							//print_r($final_arr); 
+							$inc2 = 0;
+		                	foreach($final_arr as $days)
+		                	{
+		                		$total_cost_incurred = $this->get_monthly_cost_incurred($days,$days * 2,$row17['package_time'],$row19['kitchen_type'])['total_cost_incurred'];
+		                		$profit_margin_per_tiffin = $this->get_monthly_cost_incurred($days,$days * 2,$row17['package_time'],$row19['kitchen_type'])['profit_margin_per_tiffin'];
+		                		if($days==30)
+		                		{
+		                		 $resArr1['durations'][$inc2]['days'] = '1 Month-'.$days.' Days';
+
+		                		}
+		                		else{
+		                			$resArr1['durations'][$inc2]['days'] = $days.' Days';
+		                			
+		                		}
+		                		 $resArr1['durations'][$inc2]['days_in_number'] = (int)$days;
+		                		 $resArr1['durations'][$inc2]['price'] = (int)number_format((float)$total_cost_incurred + $profit_margin_per_tiffin + $average, 2, '.', '');
+		                		 $inc2++;
+		                	}
+	               		 }
+	               		 // get one meal cost
+	               		 	$get_trial_lunch_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE `name`='Trial Meal Lunch' and deleted=0";
+		                	$mysql_query_2_2 =  $this->mysqli->query($get_trial_lunch_cost);
+		                	$trial_lunch_row = mysqli_fetch_assoc($mysql_query_2_2);
+	               		 	$resArr1['trial_meal_lunch_cost'] = (int) ceil(number_format((float)$trial_lunch_row['total_cost_incurred_c'] + $trial_lunch_row['profit_margin_per_tiffin'] + $average, 2, '.', ''));
+
+	               		 	$get_trial_dinner_cost = "SELECT `total_cost_incurred_c`,`profit_margin_per_tiffin` FROM `ply_package_rate_finder` A join `ply_package_rate_finder_cstm` B on A.id=B.id_c WHERE `name`='Trial Meal Dinner' and deleted=0";
+		                	$mysql_query_2_3 =  $this->mysqli->query($get_trial_dinner_cost);
+		                	$trial_dinner_row = mysqli_fetch_assoc($mysql_query_2_3);
+	               		 	$resArr1['trial_meal_dinner_cost'] = (int) ceil(number_format((float)$trial_dinner_row['total_cost_incurred_c'] + $trial_dinner_row['profit_margin_per_tiffin'] + $average, 2, '.', ''));
+
+	               		 //end of code here
+	                	
+	                	//end of code here
+	                	// get kitchen Addons
+	                	$get_kitchen_addons = "SELECT `ply_kitchen_ply_add_on_1ply_add_on_idb` as addon_id,`name`,`price`,`deliverable_time`,`category`,`max_allowed_quantity_c` FROM `ply_add_on` A join `ply_add_on_cstm` B on A.`id`=B.`id_c` join
+							`ply_kitchen_ply_add_on_1_c` C on A.id = C.`ply_kitchen_ply_add_on_1ply_add_on_idb` WHERE
+							C.`ply_kitchen_ply_add_on_1ply_kitchen_ida` =
+							'$kitchen_id' and A.deleted=0 and C.deleted=0";
+	                   $mysql_query_3 =  $this->mysqli->query($get_kitchen_addons);
+	                   $inc3=0;
+				       while($row19 = mysqli_fetch_assoc($mysql_query_3))
+				        { 
+				        	$resArr1['addons'][$inc3]['id'] = $row19['addon_id'];
+				        	$resArr1['addons'][$inc3]['name'] = $row19['name'];
+				        	$resArr1['addons'][$inc3]['price'] = (int) ceil(number_format($row19['price'], 2, '.', ''));
+				        	$resArr1['addons'][$inc3]['deliverable_time'] = ucfirst(str_replace("_", " ", $row19['deliverable_time']));
+				        	$resArr1['addons'][$inc3]['category'] = $row19['category'];
+				        	$resArr1['addons'][$inc3]['max_allowed_quantity'] = $row19['max_allowed_quantity_c'];
+
+				        	$inc3++;
+				        }	
+	                	//end of code here
+
+				        //get package delivery time code start here
+				        if($resArr1['lunch'] && $resArr1['dinner'])
+				        {
+				        	$get_lunch_timings = "SELECT `id`,`fromtime_c`,`todate_c`,`delivery_time` FROM `ply_delivery_time` A join `ply_delivery_time_cstm` B on A.id = B.id_c WHERE A.deleted=0 and `status`='active' and `delivery_time`='lunch'";
+				        	$mysql_query_4 =  $this->mysqli->query($get_lunch_timings);
+		                   	$inc4=0;
+					       	while($row20 = mysqli_fetch_assoc($mysql_query_4))
+					        {
+					        	$fromtime = explode(' ',$row20['fromtime_c']);
+					        	$totime = explode(' ',$row20['todate_c']);
+					        	$resArr1['lunch_timings'][$inc4]['id'] = trim($row20['id']);
+					        	$resArr1['lunch_timings'][$inc4]['type'] = ucfirst($row20['delivery_time']);
+					        	$resArr1['lunch_timings'][$inc4]['time'] = date("g:i a", strtotime($fromtime[1]))." to ".date("g:i a", strtotime($totime[1]));
+					        	$inc4++;
+					        }
+
+					        $get_dinner_timings = "SELECT `id`,`fromtime_c`,`todate_c`,`delivery_time` FROM `ply_delivery_time` A join `ply_delivery_time_cstm` B on A.id = B.id_c WHERE A.deleted=0 and `status`='active' and `delivery_time`='dinner'";
+				        	$mysql_query_5 =  $this->mysqli->query($get_dinner_timings);
+		                   	$inc5=0;
+					       	while($row21 = mysqli_fetch_assoc($mysql_query_5))
+					        {
+					        	$FROMtime = explode(' ',$row21['fromtime_c']);
+					        	$TOtime = explode(' ',$row21['todate_c']);
+					        	$resArr1['dinner_timings'][$inc5]['id'] = trim($row21['id']);
+					        	$resArr1['dinner_timings'][$inc5]['type'] = ucfirst($row21['delivery_time']);
+					        	$resArr1['dinner_timings'][$inc5]['time'] = date("g:i a", strtotime($FROMtime[1])).' to '.date("g:i a", strtotime($TOtime[1]));
+					        	$inc5++;
+					        }
+
+
+				        }else if($resArr1['lunch']){
+				        	$get_lunch_timings = "SELECT `fromtime_c`,`todate_c`,`delivery_time` FROM `ply_delivery_time` A join `ply_delivery_time_cstm` B on A.id = B.id_c WHERE A.deleted=0 and `status`='active' and `delivery_time`='lunch'";
+				        	$mysql_query_4 =  $this->mysqli->query($get_lunch_timings);
+		                   	$inc4=0;
+					       	while($row20 = mysqli_fetch_assoc($mysql_query_4))
+					        {
+					        	$fromtime = explode(' ',$row20['fromtime_c']);
+					        	$totime = explode(' ',$row20['todate_c']);
+					        	$resArr1['lunch_timings'][$inc4]['type'] = ucfirst($row20['delivery_time']);
+					        	$resArr1['lunch_timings'][$inc4]['time'] = date("g:i a", strtotime($fromtime[1]))." to ".date("g:i a", strtotime($totime[1]));
+					        	$inc4++;
+					        }
+
+				        }else if($resArr1['dinner'])
+				        {
+				        	 $get_dinner_timings = "SELECT `fromtime_c`,`todate_c`,`delivery_time` FROM `ply_delivery_time` A join `ply_delivery_time_cstm` B on A.id = B.id_c WHERE A.deleted=0 and `status`='active' and `delivery_time`='dinner'";
+				        	$mysql_query_5 =  $this->mysqli->query($get_dinner_timings);
+		                   	$inc5=0;
+					       	while($row21 = mysqli_fetch_assoc($mysql_query_5))
+					        {
+					        	$FROMtime = explode(' ',$row21['fromtime_c']);
+					        	$TOtime = explode(' ',$row21['todate_c']);
+					        	$resArr1['dinner_timings'][$inc5]['type'] = ucfirst($row21['delivery_time']);
+					        	$resArr1['dinner_timings'][$inc5]['time'] = date("g:i a", strtotime($FROMtime[1])).' to '.date("g:i a", strtotime($TOtime[1]));
+					        	$inc5++;
+					        }
+				        }
+
+	                	//end of code here
+
+	                	$get_packaging_types = "SELECT `id`,`name`,`packaging_disposition_amt`,`packaging_price`,`description`,`packaging_discounted_price`,`available_stock`,`packaging_type_c`,`status_c` FROM `ply_packaging` A join `ply_packaging_cstm` B on A.id=B.id_c WHERE A.deleted=0 and status_c='active'";
+				        $mysql_query_8 =  $this->mysqli->query($get_packaging_types);
+		                   	$inc8=0;
+					       	while($row21 = mysqli_fetch_assoc($mysql_query_8))
+					        {
+					        	$resArr1['packaging_types'][$inc8]['id'] = $row21['id'];
+					        	$resArr1['packaging_types'][$inc8]['name'] = $row21['name'];
+					        	$resArr1['packaging_types'][$inc8]['packaging_disposition_amt'] = number_format($row21['packaging_disposition_amt'], 2, '.', '');
+					        	$resArr1['packaging_types'][$inc8]['packaging_price'] = number_format($row21['packaging_price'], 2, '.', '');
+					        	$resArr1['packaging_types'][$inc8]['packaging_discounted_price'] = number_format($row21['packaging_discounted_price'], 2, '.', '');
+					        	$resArr1['packaging_types'][$inc8]['available_stock'] = (int)$row21['available_stock'];
+					        	$resArr1['packaging_types'][$inc8]['image'] = UPLOAD_URL.$row21['id']."_package_image";
+					        	$resArr1['packaging_types'][$inc8]['status'] = $row21['status_c'];
+					        	$resArr1['packaging_types'][$inc8]['packaging_note'] = $row21['description'];
+					        	$resArr1['packaging_types'][$inc8]['packaging_type'] = $row21['packaging_type_c'];
+
+					        	$inc8++;
+					        }
+
+	                	//end of code here
+
+	                	//get terms and conditions code
+				        $get_terms_conditions ="SELECT `description` FROM `ply_legal` WHERE `name`='Terms and Conditions' and deleted=0 and `purpose`='order_screen'";
+				        $mysql_query_6 =  $this->mysqli->query($get_terms_conditions);
+				        $row22 = mysqli_fetch_assoc($mysql_query_6);
+				        $resArr1['terms_and_conditions'] = w1250_to_utf8($row22['description']);
+	                	//end of code here
+
+
+
+
+	        }
+		return array_filter($resArr1);
+	}
+	public function get_all_kitchens($id=NULL)
+	{
+		if(!is_null($id) && !empty($id))
+		{
+			$id = " and `id` IN($id)";
+		}else{
+			$id = '';
+		}
+	    	$resArr1 = array();
+	    	$vendor_arr=array();
+	    	$price_arr=array();
+	    	$kitchen_arr=array();
+	    	$get_sponsored_kitchen = "SELECT `id`,`name`,`date_entered`,`description`,`kitchen_type`,`kitchen_id`,`plot_no`,`street_name`,`area_name`,`landmark`,`city_name`,`state_name`,`country_name`,`fssai_lic_no`,`speciality`,`ready_parties_bulk_order`,`capacity`,`team_size`,`fast_meal_served`,
+	    		`laltitude`,`longitude`,`pincode`,`kitchen_unavail_on_sunday`,
+                 `ply_kitchen_supervisor_id_c`,`regular_meal_price_range`,
+                 `is_sponsored_c`,`sponsored_amount_c`,`kitchen_business_type_c`,`kitchen_serving_time_c`,`sponsorship_from_c`,
+                  `sponsorship_to_c`,`regular_meal_min_price_c`,
+                   `regular_meal_max_price_c` FROM `ply_kitchen` A join 
+                  `ply_kitchen_cstm` B on A.`id`=B.`id_c` WHERE A.`deleted`=0 and `status_c`='active' $id";
+                
+	                $parent_type = 'ply_Kitchen';
+	                $mysql_query13 =  $this->mysqli->query($get_sponsored_kitchen);
+	                $k=0;
+	                while($row13 = mysqli_fetch_assoc($mysql_query13)) 
+	                { 
+	                    $latitude2 = trim($row13['laltitude']);
+				        $logitude2 = trim($row13['longitude']);
+				        $distance = get_distance_between_points($lat1, $long1,$latitude2, $logitude2);
+				        $kilometers = (float)($distance['kilometers']!='')?number_format($distance['kilometers'], 2, '.', ''):0.00;
+				        $delivery_range = $this->get_assumption('DR');
+				        
+	                       $resArr1['row_id']	= $row13['id']; 
+	                       $resArr1['name'] 	= $row13['name'];
+	                       $resArr1['date_entered'] = $row13['date_entered'];
+	                       $resArr1['description'] = $row13['description'];
+	                       switch($row13['kitchen_type'])
+	                       {
+	                       	 case 'veg' : 
+	                       	 				$resArr1['veg'] = true;
+	                       	 				$resArr1['nonveg'] = false;
+	                       	 				$resArr1['egg'] = false;
+	                       	 				break;
+	                       	 case 'nonveg' :
+	                       	 				$resArr1['veg'] = false;
+	                       	 				$resArr1['nonveg'] = true;
+	                       	 				$resArr1['egg'] = true;
+	                       	 				break;
+	                       	 case 'egg' : 
+	                       	 				$resArr1['veg'] = false;
+	                       					$resArr1['nonveg'] = true;
+	                       					$resArr1['egg'] = true;
+	                       	 				break;
+	                       	 case 'veg_nonveg':
+	                       	 					$resArr1['veg'] = true;
+	                       	 					$resArr1['nonveg'] = true;
+	                       	 					$resArr1['egg'] = true;
+	                       	 default:
+	                       	  		  $resArr1['veg'] = false;
+	                       	  		  $resArr1['nonveg'] = false;
+	                       	  		  $resArr1['egg'] = false;
+	                    	}
+
+	                       $resArr1['kitchen_id'] = $row13['kitchen_id'];
+	                       $resArr1['plot_no'] = $row13['plot_no'];
+	                       $resArr1['street_name'] = $row13['street_name'];
+	                       $resArr1['area_name'] = $row13['area_name'];
+	                       $resArr1['landmark'] = $row13['landmark'];
+	                       $resArr1['city_name'] = $row13['city_name'];
+	                       $resArr1['state_name'] = $row13['state_name'];
+	                       $resArr1['country_name'] = $row13['country_name'];
+	                       $resArr1['fssai_lic_no'] = $row13['fssai_lic_no'];
+	                       $resArr1['speciality'] = $row13['speciality'];
+	                       $resArr1['ready_parties_bulk_order'] = $row13['ready_parties_bulk_order'];
+	                       $resArr1['capacity'] = $row13['capacity'];
+	                       $resArr1['team_size'] = $row13['team_size'];
+	                       $resArr1['fast_meal_served'] = $row13['fast_meal_served'];
+	                       $resArr1['laltitude'] = $row13['laltitude'];
+	                       $resArr1['longitude'] = $row13['longitude'];
+	                       $resArr1['pincode'] = $row13['pincode'];
+	                       $resArr1['kitchen_unavail_on_sunday'] = $row13['kitchen_unavail_on_sunday'];
+	                       $resArr1['regular_meal_price_range'] = $row13['regular_meal_price_range'];
+	                       $resArr1['kitchen_business_type'] = $row13['kitchen_business_type_c'];
+	                       $resArr1['kitchen_serving_time'] = ucfirst(str_replace("_"," ",$row13['kitchen_serving_time_c']));
+
+	                       if($is_sponserd=='yes')
+	                       {
+		                      $resArr1['is_sponsored'] = $row13['is_sponsored_c'];
+		                      $resArr1['sponsored_amount'] = number_format($row13['sponsored_amount_c'], 2, '.', '');
+		                      $resArr1['sponsorship_from'] = $row13['sponsorship_from_c'];
+		                      $resArr1['sponsorship_to'] = $row13['sponsorship_to_c'];
+	                       }
+	                       $resArr1['regular_meal_min_price'] = number_format($row13['regular_meal_min_price_c'], 2, '.', '');
+	                       $resArr1['regular_meal_max_price'] = number_format($row13['regular_meal_max_price_c'], 2, '.', '');
+	                       $resArr1['Distance'] = $kilometers." Km";
+	                       $resArr1['ply_kitchen_supervisor_id_c'] = $row13['ply_kitchen_supervisor_id_c'];
+	                   
+
+	                    $kitchen_id = $row13['id'];
+	                	$vendor_arr = $this->get_vendor_name_from_kitchen($kitchen_id);
+	                	$resArr1['vendor_name'] = trim($vendor_arr['name']);
+	                	$resArr1['vendor_id'] = $vendor_arr['vendor_id'];
+	                	$resArr1['vendor_row_id'] = $vendor_arr['vendor_row_id'];
+	                	//get all vendor images
+                        $get_all_vendor_images = "SELECT `ply_vendors_notes_1notes_idb`,D.`photo_category_c` FROM `ply_vendors` A join `ply_vendors_notes_1_c` B on A.id = B.`ply_vendors_notes_1ply_vendors_ida` join `notes` C on C.id = B.`ply_vendors_notes_1notes_idb` join `notes_cstm` D on C.id=D.id_c where A.deleted=0 and C.deleted=0 and B.deleted=0 and A.`id`='".$vendor_arr['vendor_row_id']."'";
+	                    $mysql_query_1_1 =  $this->mysqli->query($get_all_vendor_images);
+	                   
+	                    while($row15 = mysqli_fetch_assoc($mysql_query_1_1))
+	                    { 
+
+	                       $resArr1['vendor_images'][$row15['photo_category_c']] = UPLOAD_URL .$row15['ply_vendors_notes_1notes_idb'];
+	                      
+	                    }
+
+	                	//end
+	                    $kitchen_sup_id = $row13['ply_kitchen_supervisor_id_c'];
+	                    $resArr1['kitchen_supervisor_name'] = $this->get_kitchen_supervisor_name($kitchen_sup_id);
+
+	                    $price_arr = $this->calculate_monthly_tiffin_price($kitchen_id,$row13['kitchen_type']);
+	                    $resArr1['single_tiffin_cost'] = $price_arr['oneTiffinCost'];
+	                    $resArr1['Monthly_tiffin_cost'] = $price_arr['MonthTiffinCost'];
+	                    
+	                    $get_all_kitchen_images = "SELECT B.ply_kitchen_notes_1notes_idb,D.`photo_category_c` FROM `ply_kitchen` A join `ply_kitchen_notes_1_c` B on A.id = B.`ply_kitchen_notes_1ply_kitchen_ida` join `notes` C on C.id = B.`ply_kitchen_notes_1notes_idb` join `notes_cstm` D on C.id=D.id_c where A.deleted=0 and B.deleted=0 and C.deleted=0 and A.`id`='$kitchen_id'";
+	                    $mysql_query_1 =  $this->mysqli->query($get_all_kitchen_images);
+	                    
+	                    while($row13 = mysqli_fetch_assoc($mysql_query_1))
+	                    { 
+
+	                       $resArr1['kitchen_images'][$row13['photo_category_c']] = UPLOAD_URL .$row13['ply_kitchen_notes_1notes_idb'];
+	                      
+	                    }
+
+	                    $get_all_kitchen_cuisines = "SELECT GROUP_CONCAT(`name` SEPARATOR ',') as cuisines FROM `ply_cuisine` A join `ply_kitchen_ply_cuisine_1_c` B on A.id=B.`ply_kitchen_ply_cuisine_1ply_cuisine_idb` WHERE A.deleted=0 and B.deleted=0 and B.ply_kitchen_ply_cuisine_1ply_kitchen_ida='$kitchen_id'";
+	                    $mysql_query_2 =  $this->mysqli->query($get_all_kitchen_cuisines);
+	                    $row14 = mysqli_fetch_assoc($mysql_query_2);
+	                    $resArr1['cuisine'] = (!empty($row14['cuisines'])?$row14['cuisines']:'NA');
+
+	                    $get_all_kitchen_addons = "SELECT GROUP_CONCAT(`name` SEPARATOR ',') as addOn FROM `ply_add_on` A join `ply_kitchen_ply_add_on_1_c` B on A.id=B.`ply_kitchen_ply_add_on_1ply_add_on_idb` WHERE A.deleted=0 and B.deleted = 0 and B.ply_kitchen_ply_add_on_1ply_kitchen_ida='$kitchen_id'";
+	                    $mysql_query_3 =  $this->mysqli->query($get_all_kitchen_addons);
+	                    $row15 = mysqli_fetch_assoc($mysql_query_3);
+	                    $resArr1['addons'] = (!empty($row15['addOn'])?$row15['addOn']:'NA');
+
+		                $rating = array();
+		                $get_kitchen_ratings = "SELECT `rating` FROM `ply_rating_given_by_cust_2_kitchen` A join `ply_rating_given_by_cust_2_kitchen_cstm` B on A.id=B.id_C join ply_kitchen_ply_rating_given_by_cust_2_kitchen_1_c C on A. `ply_kitchen_id_c` = C.ply_kitchen_ply_rating_given_by_cust_2_kitchen_1ply_kitchen_ida WHERE A.deleted=0 and C.deleted=0 and `ply_kitchen_id_c`='$kitchen_id'";
+		                $mysql_query_1_2 =  $this->mysqli->query($get_kitchen_ratings);
+		                while($row16 = mysqli_fetch_assoc($mysql_query_1_2))
+		                { 
+
+		                   $rating[] = $row16['rating'];
+		                }
+
+		                $rating_avg = array_sum($rating) / count(array_filter($rating));
+		                if(is_nan($rating_avg))
+		                {
+		                	$rating_avg = 0;
+		                }
+
+		                $resArr1['rating'] = number_format($rating_avg, 1, '.', '');
+		                if(!empty($resArr1))
+		                {
+		                	array_push($kitchen_arr,$resArr1);
+		                }
+		                $resArr1 = array();
+	                      
+	            } //while loop closing
+	           return $kitchen_arr;  
+	}
+	public function get_offer_related_kitchens($offer_id)
+	{
+		$response = array();
+		$kitchen_id = array();
+		$get_all_offer_related_kitchens = "SELECT `ply_offer_ply_kitchen_1ply_kitchen_idb` as kitchen_id FROM `ply_offer_ply_kitchen_1_c` WHERE `deleted`=0 and `ply_offer_ply_kitchen_1ply_offer_ida`=TRIM('$offer_id')";
 		
-	   $query11 = "SELECT * FROM `mt_item` WHERE `merchant_id`='$merchant_id' and `is_featured`='1' and LOWER(`status`) = LOWER('Active')";
-       $result11 = $this->sidebar_query($query11);
-               
-               if(!empty($result11)){
-				   for($k=0;$k<count($result11);$k++)
-				   {
-					   //print_r($result11);exit;
-					   $arr = unserialize($result11[$k]['price']);
-					   if(is_array($arr)){
-						  foreach((array)$arr as $key=>$value)
-						  {
-							if(!empty($result11[$k]['price_type']) && strtolower($result11[$k]['price_type'])== strtolower('Single'))
-							{
-								$result11[$k][$key]= $value;
-								
-							}else{
-									$query12 = "SELECT `size_name` FROM `mt_size` WHERE `id`='$key'";
-									$result1 = $this->mysqli->query($query12); 
-									$record11 = mysqli_fetch_assoc($result1);
-									$size_name = $record11['size_name'];
-									$result11[$k][$size_name]= $value;
-								   // $k++;
-							}
-						  }
-						 } 
-						 unset($result[$k]['price']);
-						 array_push($data,$result11);
-						 $result11=array();
-				
-				   }
-			   }else{
-						 array_push($data,$result11);
-						 //$result11=array();
-			   }
-      $mysql_query =  $this->mysqli->query($query);//mysqli_query($this->mysqli,$query); //query the db
-      
-      while($row = $mysql_query->fetch_assoc()) 
-      { 
-          $cat_id = $row['category_id'];
-          $mer_id = $row['merchant_id'];
-          $cat_name =  $this->mysqli->query("SELECT * FROM `mt_category` WHERE `id`='$cat_id'");
-          $row = $cat_name->fetch_assoc();
-          $resArr['cat_id'] =  $row['id'];
-          $resArr['category_name'] =  $row['category_name'];
-          $resArr['category_description'] =  w1250_to_utf8($row['category_description']);
-          $resArr['photo'] =  $row['photo'];
-          $resArr['status'] =  $row['status'];
-          $resArr['sequence'] =  $row['sequence'];
-          $resArr['date_created'] =  $row['date_created'];
-          $resArr['date_modified'] =  $row['date_modified'];
-          $resArr['spicydish'] =  $row['spicydish'];
-          $resArr['spicydish_notes'] =  $row['spicydish_notes'];
-          $resArr['dish'] =  $row['dish'];
-          $resArr['category_name_trans'] =  $row['category_name_trans'];
-          $resArr['category_description_trans'] =  $row['category_description_trans'];
-          $resArr['parent_cat_id'] =  $row['parent_cat_id'];
+		$mysql_query =  $this->mysqli->query($get_all_offer_related_kitchens);
+	    while($row15 = mysqli_fetch_assoc($mysql_query))
+	    {
+	    	$kitchen_id[] = $row15['kitchen_id'];
+	    	$kitchen_ids = "'" . implode("', '", $kitchen_id) . "'";
 
+	    	//array_push($resArr,$this->get_all_kitchens($kitchen_id));
 
-          
-			$i=0;
-			$item_ids =  $this->mysqli->query("SELECT `item_id` FROM `mt_merchant_categories` where `category_id`='$cat_id' and `merchant_id`='$mer_id'");  
-          while($result = mysqli_fetch_assoc($item_ids))
-          {
-              $item_id = $result['item_id'];
-			  if($category_type=='all')
-			  {
-				$item_query = "SELECT `item_name`,`item_description`,`status`,`price`,`addon_item`,`cooking_ref`,`discount`,`is_featured`,`date_created`,`date_modified`,`ingredients`,`spicydish`,`two_flavors`,`two_flavors_position`,`require_addon`,`dish`,`price_type`,`item_name_trans`,`item_description_trans`,`not_available`,`points_earned`,`points_disabled`,`is_veg_nonveg`,`stock_status`,`gallery_photo`,`photo`,`price_type` from mt_item WHERE  `id`= '$item_id' and LOWER(`status`) = 'active' ORDER BY `item_name` ASC";
-			  }else{
-				  $item_query = "SELECT `item_name`,`item_description`,`status`,`price`,`addon_item`,`cooking_ref`,`discount`,`is_featured`,`date_created`,`date_modified`,`ingredients`,`spicydish`,`two_flavors`,`two_flavors_position`,`require_addon`,`dish`,`price_type`,`item_name_trans`,`item_description_trans`,`not_available`,`points_earned`,`points_disabled`,`is_veg_nonveg`,`stock_status`,`gallery_photo`,`photo` from mt_item WHERE  `id`= '$item_id' and LOWER(`status`) = 'active' and LOWER(`is_veg_nonveg`)=LOWER('$category_type') ORDER BY item_name ASC";  
-			  }
-              $item_name =  $this->mysqli->query($item_query);
-              $record = mysqli_fetch_assoc($item_name);
-			  if(!empty($record))
-			  {  
-				  $resArr['item'][$i]['item_id'] = $item_id; 
-				  $resArr['item'][$i]['item_name'] = $record['item_name']; 
-				  $resArr['item'][$i]['item_description'] = w1250_to_utf8($record['item_description']); 
-				  $resArr['item'][$i]['status'] = $record['status']; 
-				  $resArr['item'][$i]['addon_item'] = $record['addon_item']; 
-				  $resArr['item'][$i]['cooking_ref'] = $record['cooking_ref']; 
-				  $resArr['item'][$i]['discount'] = $record['discount']; 
-				  $resArr['item'][$i]['is_featured'] = $record['is_featured']; 
-				  $resArr['item'][$i]['date_created'] = $record['date_created']; 
-				  $resArr['item'][$i]['date_modified'] = $record['date_modified']; 
-				  $resArr['item'][$i]['ingredients'] = $record['ingredients']; 
-				  $resArr['item'][$i]['spicydish'] = $record['spicydish'];
-				  $resArr['item'][$i]['two_flavors'] = $record['two_flavors']; 
-				  $resArr['item'][$i]['two_flavors_position'] = $record['two_flavors_position'];
-				  $resArr['item'][$i]['require_addon'] = $record['require_addon'];
-				  $resArr['item'][$i]['dish'] = $record['dish'];
-				  $resArr['item'][$i]['item_name_trans'] = $record['item_name_trans'];
-				  $resArr['item'][$i]['not_available'] = $record['not_available'];
-				  $resArr['item'][$i]['points_earned'] = $record['points_earned'];
-				  $resArr['item'][$i]['points_disabled'] = $record['points_disabled'];
-				  $resArr['item'][$i]['is_veg_nonveg'] = $record['is_veg_nonveg'];
-				  $resArr['item'][$i]['images'] = $record['photo'];
-				  $resArr['item'][$i]['stock_status'] = $record['stock_status'];
-				  $resArr['item'][$i]['price_type'] = $record['price_type'];
-				  $arr = unserialize($record['price']);
-				  if(is_array($arr)){
-					  foreach((array)$arr as $key=>$value)
-					  {
-					    if(!empty($record['price_type']) && strtolower($record['price_type'])== strtolower('Single'))
-						{
-							$resArr['item'][$i][$key]= $value;
-							
-						}else{
-								$query12 = "SELECT `size_name` FROM `mt_size` WHERE `id`='$key'";
-								$result1 = $this->mysqli->query($query12); 
-								$record11 = mysqli_fetch_assoc($result1);
-								$size_name = $record11['size_name'];
-								$resArr['item'][$i][$size_name]= $value;
-							   // $k++;
-						}
-					  }
-					 } 
-				
-				  $i++;
-			  }
-			  			
-          }
-		  
-		  
-		  
-	      array_push($data,$resArr);
-          $j++;
-          $resArr=array();
-         
-      }
-	  
-       //print_r($data);exit;
-      return $data;
+	    }
+	    $response = $this->get_all_kitchens($kitchen_ids);
+	    return  array_filter($response);
 
-    }
+	}
 }
 $db = new DB();
-  //$db->db_num("SELECT * FROM mt_client");
- // UPDATE mt_merchant SET `last_login` = '1970-01-01 08:00:00' WHERE CAST(`last_login` AS CHAR(20)) = '0000-00-00 00:00:00'
- //SET GLOBAL sql_mode = ''
 ?>

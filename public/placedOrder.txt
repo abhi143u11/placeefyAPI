@@ -1,0 +1,16 @@
+
+placedOrder Result at 2020-04-12 17:34:02 :-
+
+if all get blank it assigned default delivery boy
+placedOrder Result at 2020-04-12 18:27:23 :-
+Array
+(
+    [default_delivery_boy_id] => cae497f8-6c52-f3df-85d8-5e788d272a47
+)
+
+if all get blank it assigned default delivery boy
+placedOrder Result at 2020-04-12 18:30:42 :-
+Array
+(
+    [default_delivery_boy_id] => cae497f8-6c52-f3df-85d8-5e788d272a47
+)

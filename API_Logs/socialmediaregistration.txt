@@ -522,3 +522,69 @@ Array
     [mypassword] => d41d8cd98f00b204e9800998ecf8427e
     [uploadedFile] => 
 )
+
+socialmediaregistration Result at 2020-03-15 22:50:46 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceit@raisoni.net
+    [social_unique_id] => 101930561724670047682
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => Slim\Http\UploadedFile Object
+        (
+            [file] => /tmp/phpmrJUGU
+            [name:protected] => 1.png
+            [type:protected] => image/png
+            [size:protected] => 584083
+            [error:protected] => 0
+            [sapi:protected] => 1
+            [stream:protected] => 
+            [moved:protected] => 
+        )
+
+)
+
+socialmediaregistration Result at 2020-03-15 22:52:27 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceitqqq@raisoni.net
+    [social_unique_id] => 101930561724670047682q
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => Slim\Http\UploadedFile Object
+        (
+            [file] => /tmp/php5dB4oP
+            [name:protected] => 1.png
+            [type:protected] => image/png
+            [size:protected] => 584083
+            [error:protected] => 0
+            [sapi:protected] => 1
+            [stream:protected] => 
+            [moved:protected] => 
+        )
+
+)
+
+socialmediaregistration Result at 2020-03-15 22:53:03 :-
+Array
+(
+    [client_name] => Prathmesh Zade
+    [email_address] => zade_prathmesh.ghrceitqqq@raisoni.net
+    [social_unique_id] => 101930561724670047682q
+    [social_type] => google
+    [mypassword] => d41d8cd98f00b204e9800998ecf8427e
+    [uploadedFile] => Slim\Http\UploadedFile Object
+        (
+            [file] => /tmp/phpbQpHSa
+            [name:protected] => 1.png
+            [type:protected] => image/png
+            [size:protected] => 584083
+            [error:protected] => 0
+            [sapi:protected] => 1
+            [stream:protected] => 
+            [moved:protected] => 
+        )
+
+)

@@ -1,0 +1,228 @@
+
+getKitchensFromOffer Result at 2020-03-30 12:19:30 :-
+Array
+(
+    [offer_id] => aaa
+)
+
+getKitchensFromOffer Result at 2020-03-30 13:57:31 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 13:58:16 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:25 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:27 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:29 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:30 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:31 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:32 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:11:33 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:12:39 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:13:59 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:14:37 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:17:17 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:17:22 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:17:32 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:17:45 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:17:56 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 14:18:56 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:01:51 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:04:45 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:04:47 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:05:05 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:05:06 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:05:07 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:05:08 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:05:09 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:06:21 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:08:49 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:10:26 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:10:29 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:12:11 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:14:55 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:14:56 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:15:01 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:15:09 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252
+)
+
+getKitchensFromOffer Result at 2020-03-30 15:15:17 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)
+
+getKitchensFromOffer Result at 2020-03-30 18:11:58 :-
+Array
+(
+    [offer_id] => 4db28389-f52a-937a-c4bf-5e2be246252a
+)

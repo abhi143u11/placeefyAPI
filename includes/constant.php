@@ -25,9 +25,13 @@ define('CONFLICT',			          409);
 define('ATHORIZATION_HEADER_NOT_FOUND',300);
 define('ACCESS_TOKEN_ERRORS',301);
 define('JWT_PROCESSING_ERROR',302);
+define('Delivery_Boy_Check_Count',15);
+define('default_delivery_boy_id','cae497f8-6c52-f3df-85d8-5e788d272a47');
+define('LOG_PATH','placeefyAPI/../../API_Logs/');
 define('GATEWAY','android');
 define('SITE_URL','http://www.vrcompanies.in/placeefy/');
 define('UPLOAD_URL','http://www.vrcompanies.in/placeefy/uploads/');
+define('CUSTOMER_IMAGE_PATH','http://vrcompanies.in/placeefyAPI/app/api/images/');
 //set all API keys 
 $config = array();
 $config['api_log_file_path'] = basename(dirname(__DIR__)) . '/../../API_Logs/';

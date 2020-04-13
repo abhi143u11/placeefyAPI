@@ -55,7 +55,7 @@ $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 require_once('../app/api/customer.php');
 // require_once('../app/api/merchant.php');
 // require_once('../app/api/delivery_boy.php');
-// require_once('../app/api/orders.php');
+require_once('../app/api/orders.php');
 require_once('../app/api/test.php');
 
 
